@@ -1,2 +1,0 @@
-<!--3-->
-Ricardo, 45 anos, pai de família , analista que foca no controle rígido do orçamento familiar, acompanhando gastos fixos e metas de economia para viagens. Valoriza a transparência de dados e a facilidade de anexar comprovantes para consulta coletiva.
