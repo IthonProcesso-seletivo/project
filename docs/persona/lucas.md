@@ -1,0 +1,2 @@
+<!--1-->
+Lucas, 16 anos, adolescente, estudante que utiliza o sistema para organizar seus gastos de estudo e academia para evitar cobranças. Sua prioridade é uma interface visual intuitiva que funcione como uma visão do que entra e o que sai, e quando deve pagar as despesas.

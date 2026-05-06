@@ -1,0 +1,2 @@
+<!--2-->
+Helena, 42 anos, Mãe Multitarefa, profissional autônoma que busca centralizar os gastos escolares e médicos dos filhos para reduzir sua exaustão mental. Prioriza notificações rápidas e uma clareza monetaria para o restante da família através do app.
