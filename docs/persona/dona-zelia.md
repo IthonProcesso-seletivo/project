@@ -1,16 +1,16 @@
 <!--4-->
 Nome: Zélia Santos | Idade: 68 anos
 
-Objetivo: Gerenciar o patrimônio imobiliário da família, garantindo que os aluguéis sejam recebidos e as obrigações (IPTU, condomínio) estejam em dia.
+Objetivo: Gerenciar o patrimônio imobiliário da família, garantindo que aida sobre dinheiro ao final do mês.
 
 Dores:
->Esquecimento de datas de reajuste de contratos; 
->Confusão sobre quais imóveis estão gerando lucro líquido ou apenas despesa de manutenção.
+>Dificuldade em gerenciar todos os seus imóveis; 
+>Confusão sobre quais os maiores gastos da família.
 
 Necessidades: 
->Alertas de vencimento de aluguel e seguros;
->Relatório de rendimento bruto vs. líquido por imóvel.
+>Clareza e facilidade nos dashboards;
+>Painel que mostre o principal gasto
 
-Comportamento: Precisa de clareza para não perder contratos e recibos digitalizados e valoriza a facilidade de gerar um PDF de resumo para o contador.
+Comportamento: Precisa de clareza para não se perder com todos os seus imóveis e gastos familiares.
 
-Critério de Sucesso: Ter todos os fluxos de caixa de seus 5 imóveis organizados sem depender de pastas físicas ou cobranças telefônicas constantes.
+Critério de Sucesso: Conseguir ver o seus 5 imóveis organizados sem depender de pastas físicas e conseguir identificar pontos de melhoria nos gastos familiares.

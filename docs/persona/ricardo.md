@@ -1,16 +1,16 @@
 <!--3-->
 Nome: Ricardo Oliveira | Idade: 45 anos
 
-Objetivo: Maximizar a rentabilidade do patrimônio familiar através de uma visão clara de investimentos (Renda Fixa, Alugueis , Ações).
+Objetivo: Maximizar a rentabilidade do patrimônio familiar através de uma visão clara das contas.
 
 Dores: 
->Dificuldade em calcular a rentabilidade real do seu patrimônio; 
->Falta de um histórico de performance de longo prazo; 
+>Dificuldade em enxergar para onde está indo seu dinheiro; 
+>Dificuldade em saber quanto seus filho gastam; 
 
 Necessidades: 
->Gráficos de alocação de ativos; 
->Comparação de performance entre os mesês;
+>Resumo dos gastos; 
+>Identificação de quem adicionou o gasto;
 
-Comportamento: Investidor técnico, lê portais de notícias financeiras e busca segurança máxima (criptografia) para seus dados sensíveis.
+Comportamento: Pai de família, lê portais de notícias e busca segurança financeira.
 
-Critério de Sucesso: Identificar rapidamente quais ativos estão performando abaixo do esperado para realizar ajustes estratégicos na carteira da família.
+Critério de Sucesso: Identificar rapidamente quais gastos podem ser cortados para conseguir melhorar o custo de vida da família.
