@@ -22,7 +22,7 @@ Este documento serve para alinhar o que o nosso sistema oferece com o que as per
 - Entender o impacto dos gastos atuais no futuro da família
 - Gerar resumos em PDF para facilitar a vida do contador
 
-   2. Mapa de Valor
+  2. Mapa de Valor
 
     Aliviadores de Dor
 - Alertas e notificações automáticas de vencimento e seguros
