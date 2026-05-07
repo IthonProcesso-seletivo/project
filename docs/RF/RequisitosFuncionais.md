@@ -1,6 +1,6 @@
 Requisitos Funcionais - Auxílio Financeiro Familiar
 
-Este documento detalha as funcionalidades do sistema, ajustadas conforme o feedback da equipe.
+Este documento detalha as funcionalidades do sistema, ajustadas conforme o feedback da equipa.
 
 Gestão de Contas e Despesas
 
@@ -10,11 +10,11 @@ RF02 - Identificação de Gastos por Membro: Sistema de perfis ou tags para rast
 
 RF03 - Organização Inteligente: Categorização automática entre gastos fixos e variáveis para otimização de economia.
 
-RF04 - Cálculo de Saldo Real: Exibição do valor disponível após a dedução automática de contas fixas registradas.
+RF04 - Cálculo de Saldo Real: Exibição do valor disponível após a dedução automática de contas fixas registadas.
 
-Gestão de Patrimônio
+Gestão de Património
 
-RF05 - Gestão de Aluguéis: Controle do fluxo de caixa de ativos imobiliários (entradas e manutenções).
+RF05 - Gestão de Alugueres: Controle do fluxo de caixa de ativos imobiliários (entradas e manutenções).
 
 RF06 - Dashboard de Lucro Líquido: Painel visual que desconta despesas de manutenção para mostrar o rendimento real.
 
