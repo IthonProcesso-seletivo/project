@@ -37,3 +37,9 @@ Criadores de Ganho (Gain Creators)
 Produtos e Serviços
 - Aplicativo de gestão financeira com suporte a múltiplos perfis e gestão imobiliária.
 - Sistema de armazenamento e digitalização de recibos e documentos financeiros.
+
+---
+Referências e Metodologia
+
+Para a elaboração deste documento, foi utilizada a metodologia do Value Proposition Canvas da Strategyzer, que permite o alinhamento entre as necessidades dos clientes e a solução proposta.
+-Link de referência: https://www.strategyzer.com/library/value-proposition-canvas-a-tool-to-understand-what-customers-really-want
