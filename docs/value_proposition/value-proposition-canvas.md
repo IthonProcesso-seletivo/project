@@ -1,8 +1,8 @@
 Value Proposition Canvas - Auxílio Financeiro Familiar
 
-Este documento alinha as funcionalidades do sistema com as novas dores e necessidades identificadas nas personas atualizadas da equipe (Helena, Dona Zélia, Ricardo e Lucas).
+Este documento alinha as funcionalidades do sistema com as novas dores e necessidades identificadas nas personas atualizadas da equipe.
 
-1. Perfil do Cliente
+1. Perfil do Cliente (Representado pelo Círculo)
 
 Tarefas do dia a dia (Jobs)
 - Consolidar gastos de diferentes bancos e cartões em um só lugar
@@ -22,24 +22,21 @@ Ganhos Desejados (Gains)
 - Interface visual que demonstre o progresso do patrimônio de forma simples
 - Agilidade para identificar quais ativos ou imóveis precisam de atenção
 
-2. Mapa de Valor (Nossa Solução)
+2. Proposta de Valor (Representada pelo Quadrado)
 
 Aliviadores de Dor (Pain Relievers)
 - Identificação de Gastos por Membro: Sistema de perfis para rastrear a origem de cada despesa familiar.
-- Alertas de Contratos: Notificações automáticas para reajustes de aluguel e vencimento de apólices.
-- Filtro Inteligente: Separação automática entre o que é gasto essencial e o que é variável.
+- Organização Inteligente: Separação automática entre gastos fixos e variáveis.
 
 Criadores de Ganho (Gain Creators)
 - Dashboard de Lucro Líquido: Painel que desconta manutenções para exibir o rendimento real dos imóveis.
 - Gráficos de Evolução: Visualização intuitiva do crescimento patrimonial para incentivar metas.
-- Relatório Consolidado: Exportação rápida em PDF com a visão unificada de bancos e entradas.
+- Relatório Consolidado: Visão clara de todos os bancos e entradas da família para consulta direta na plataforma (sem exportação em PDF).
 
 Produtos e Serviços
-- Aplicativo de gestão financeira com suporte a múltiplos perfis e gestão imobiliária.
-- Sistema de armazenamento e digitalização de recibos e documentos financeiros.
+- Aplicativo de gestão financeira com suporte a múltiplos perfis familiares e gestão de ativos imobiliários.
 
 ---
-Referências e Metodologia
 
 Para a elaboração deste documento, foi utilizada a metodologia do Value Proposition Canvas da Strategyzer, que permite o alinhamento entre as necessidades dos clientes e a solução proposta.
 -https://canva.link/v07ls65u78exnmq
