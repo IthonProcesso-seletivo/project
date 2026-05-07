@@ -42,4 +42,4 @@ Produtos e Serviços
 Referências e Metodologia
 
 Para a elaboração deste documento, foi utilizada a metodologia do Value Proposition Canvas da Strategyzer, que permite o alinhamento entre as necessidades dos clientes e a solução proposta.
--Link de referência: https://www.strategyzer.com/library/value-proposition-canvas-a-tool-to-understand-what-customers-really-want
+-https://canva.link/v07ls65u78exnmq
