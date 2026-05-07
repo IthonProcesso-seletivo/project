@@ -36,8 +36,8 @@ Categorização: Agrupamento por tipo (Moradia, Alimentação, Lazer, etc.).
 Listagem e edição de propriedades.
 
 5.3. Dashboards (Visualização)
-Resumo Mensal: Gráfico de pizza comparando Gastos Fixos vs. Variáveis.
-Fluxo de Caixa: Gráfico de barras mostrando as maiores despesas e outro mostrando o saldo restante.
+Resumo: cards dos  Gastos Fixos e Variáveis.
+Fluxo de Caixa: card mostrando as maiores despesas e outro mostrando o saldo restante.
 
 6. Fluxo de Desenvolvimento Sugerido
 
