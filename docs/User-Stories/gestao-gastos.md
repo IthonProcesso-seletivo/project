@@ -10,8 +10,6 @@ para manter o inventário da família atualizado.
 
 Critérios de Aceitação:
 
-O sistema deve permitir anexar 1 arquivo (escritura/contrato) de até 10MB.
-
 O campo "Valor de Compra" deve aceitar apenas números positivos.
 
 Avaliação INVEST:
@@ -41,8 +39,6 @@ para que o sistema me lembre dos vencimentos e eu evite juros.
 Critérios de Aceitação:
 
 Permitir configurar a frequência (mensal, trimestral, etc.).
-
-Gerar alerta visual quando faltarem 5 dias para o vencimento.
 
 Avaliação INVEST:
 
