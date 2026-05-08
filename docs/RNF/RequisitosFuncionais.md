@@ -49,8 +49,6 @@ RNF-007 Usabilidade
 
 >O "Lançamento Rápido" deve permitir que um usuário leigo tenha um índice de erro inferior a 10% na primeira tentativa.
 
->Implementação de Modo Escuro (Dark Mode) nativo para economia de bateria e conforto visual.
-
 RNF-008 Conformidade
 
 >Total conformidade com a LGPD (Lei Geral de Proteção de Dados).
