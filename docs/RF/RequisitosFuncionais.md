@@ -1,3 +1,4 @@
+<!--1-->
 Requisitos Funcionais - Auxílio Financeiro Familiar
 
 Este documento detalha as funcionalidades do sistema, ajustadas conforme o feedback final da equipe e as necessidades técnicas de gestão.
