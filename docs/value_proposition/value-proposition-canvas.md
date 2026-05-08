@@ -39,4 +39,4 @@ Produtos e Serviços
 ---
 
 Para a elaboração deste documento, foi utilizada a metodologia do Value Proposition Canvas da Strategyzer, que permite o alinhamento entre as necessidades dos clientes e a solução proposta.
-[-https://canva.link/v07ls65u78exnmq]
+[-https://canva.link/f8zpogr59tayru8]
