@@ -14,7 +14,7 @@ RF04 - Exclusão de Conta: Opção para o usuário remover permanentemente seu r
 
 Gestão de Contas e Despesas
 
-RF05 - Consolidação de Contas: Integração de saldos e gastos de diferentes bancos e cartões em uma única interface.
+RF05 - Consolidação Financeira: Permitir o registo e visualização centralizada de contas, cartões e despesas em uma única interface.
 
 RF06 - Cadastro Manual de Gastos: Funcionalidade para o usuário inserir despesas manualmente.
 
@@ -24,7 +24,7 @@ RF08 - Cadastro de Receita: Registro de entradas financeiras (salários, bônus,
 
 RF09 - Identificação por Membro: Sistema de tags para rastrear qual membro da família realizou cada despesa.
 
-RF10 - Organização Inteligente: Categorização automática entre gastos fixos e variáveis.
+RF10 - Classificação de Despesas: Categorizar despesas automaticamente entre gastos fixos e variáveis.
 
 RF11 - Cálculo de Saldo Real: Exibição do valor disponível após a dedução automática de contas fixas.
 
@@ -34,12 +34,11 @@ RF12 - Cadastro de Patrimônio: Registro de ativos imobiliários e outros bens d
 
 RF13 - Atualização de Valor Patrimonial: Permitir que o usuário atualize o valor de mercado ou avaliação dos seus bens.
 
-RF14 - Gestão de Aluguéis: Controle do fluxo de caixa de imóveis (entradas de aluguel e custos de manutenção).
 
 Visualização e Diagnóstico
 
-RF15 - Dashboard de Lucro Líquido: Painel visual que desconta despesas de manutenção para mostrar o rendimento real dos ativos.
+RF14 - Dashboard de Saldo Líquido: Painel visual que desconta despesas de manutenção para mostrar o rendimento real dos ativos.
 
-RF16 - Gráficos de Evolução: Visualização do crescimento patrimonial ao longo do tempo.
+RF15 - Gráficos de Evolução: Visualização do crescimento patrimonial ao longo do tempo.
 
-RF17 - Relatório Consolidado: Visualização rápida na plataforma de todas as entradas e estados das contas (Apenas visualização, sem PDF).
+RF16 - Relatório Consolidado: Visualização rápida na plataforma de todas as entradas e estados das contas (Apenas visualização, sem PDF).
