@@ -18,11 +18,11 @@ Database (Persistência): Armazena dados de usuários, transações e propriedad
 4. Modelagem de Dados (Entidades)
 Para o funcionamento do sistema, as seguintes tabelas principais são necessárias no PostgreSQL:
                                 
-Usuários : id, nome, email, senha  -- Cadastro de membros da família.
+Usuários : Cadastro de membros da família.
 
-Gastos : id, descricao, valor, data, categoria, tipo -- O campo tipo diferencia "Fixo" de "Variável".
+Gastos : O campo tipo diferencia "Fixo" de "Variável".
 
-Imóveis : id, nome, endereco, valor_estimado -- Registro de patrimônio imobiliário.
+Imóveis : Registro de patrimônio imobiliário.
 
 5. Módulos do Sistema
 5.1. Módulo de Gestão Financeira
