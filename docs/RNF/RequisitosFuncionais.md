@@ -1,52 +1,62 @@
 <!--1-->
 Requisitos Nao Funcionais Sistema de Gerenciamento Financeiro Familiar
 
+Requisitos Não Funcionais(RNF) são as premissas que definem a qualidade e as restrições do sistema.
 
-1. Segurança
+RNF-001 Desempenho
 
-Perguntas: Como proteger dados sensíveis de patrimônio? O site exige protocolos específicos?
-Soluções: Criptografia obrigatória para todos os dados financeiros. Implementação de protocolos de segurança para impedir acesso não autorizado a informações pessoais.
+>O Dashboard consolidado deve carregar em no máximo 1,5 segundos sob conexões 4G estáveis.
 
-2. Capacidade
+>Tempo de resposta otimizado para leitura e escrita de transações financeiras.
 
-Perguntas: Qual o limite de transações que o sistema suporta sem ficar lento?
-Soluções: O banco de dados deve ser otimizado para suportar mais de 500 registros de transações por família com indexação de alta performance.
+RNF-002 Escalabilidade
 
-3. Compatibilidade
+>Utilização de auto-scaling na infraestrutura para suportar picos de até 10x o tráfego normal entre os dias 28 e 05 de cada mês.
 
-Perguntas: Onde o usuário acessará o sistema? Quais navegadores são essenciais?
-Soluções: Garantir 100% de funcionalidade nas últimas 3 versões do Chrome, Safari e Firefox, além de suporte total para Android e iOS via Webview (interface responsiva).
+>O banco de dados deve suportar o crescimento contínuo de registros sem perda de eficiência.
 
-4. Confiabilidade e Disponibilidade
+RNF-003 Confiabilidade e Disponibilidade
 
-Perguntas: Qual a tolerância a falhas e o tempo de recuperação em caso de queda?
-Soluções: Disponibilidade de 99,9% (SLA). Plano de Recuperação de Desastres (DRP) capaz de restaurar dados financeiros em até 4 horas.
+>Disponibilidade de 99,9% (SLA).
 
-5. Manutenibilidade e Gerenciabilidade
+>Plano de Recuperação de Desastres (DRP) capaz de restaurar dados financeiros em até 4 horas.
 
-Perguntas: O código é fácil de manter e testar para evitar erros em cálculos críticos?Soluções: Uso de Clean Architecture e cobertura mínima de 80% em testes unitários, garantindo que regras de juros e cálculos sejam facilmente corrigíveis.
+>Garantia da integridade dos dados em todas as operações de cálculo.
 
-6. Escalabilidade
+RNF-004 Segurança
 
-Perguntas: O sistema aguenta o pico de acessos no fechamento do mês?
-Soluções: Utilização de auto-scaling na infraestrutura para suportar picos de até 10x o tráfego normal entre os dias 28 e 05 de cada mês.
+>Criptografia obrigatória para todos os dados financeiros e de patrimônio sensíveis.
 
-7. Usabilidade 
+>Implementação de protocolos de segurança para impedir acesso não autorizado a informações pessoais.
 
-Perguntas: Um usuário sem técnica consegue usar o app? Qual a margem de erro aceitável?Soluções: O "Lançamento Rápido" deve ser intuitivo a ponto de um usuário leigo ter um índice de erro inferior a 10% na primeira tentativa, sem treinamento.
+>Controle de acesso rigoroso e autenticação multifator.
 
-8. Desempenho
+RNF-005 Manutenibilidade
 
-Perguntas: Qual a velocidade de carregamento em redes móveis (4G)?
-Soluções: O Dashboard consolidado deve carregar em no máximo 1,5 segundos sob conexões 4G estáveis.
+>Uso de Clean Architecture e código modular para facilitar futuras atualizações e substituições de componentes.
 
-9. Conformidade
+>Cobertura mínima de 80% em testes unitários, especialmente em regras de juros e cálculos críticos.
 
-Perguntas: Como o sistema lida com a privacidade legal dos dados da família?
-Soluções: Total conformidade com a LGPD, garantindo funções nativas para exportação ou exclusão definitiva de todos os dados do usuário.
+>Logs detalhados e acessíveis para facilitar diagnósticos e auditorias.
 
-10. Ambiental
+RNF-006 Portabilidade e Compatibilidade
 
-Perguntas: Em que condições físicas o usuário usará o sistema?
-Soluções: Foco em uso mobile "sempre à mão" com a implementação de Modo Escuro (Dark Mode) nativo para economizar bateria e facilitar a leitura em baixa luminosidade.
+>Funcionalidade total nas últimas 3 versões dos navegadores Chrome, Safari e Firefox.
 
+>Suporte total para Android e iOS via interface responsiva (Webview).
+
+RNF-007 Usabilidade
+
+>O "Lançamento Rápido" deve permitir que um usuário leigo tenha um índice de erro inferior a 10% na primeira tentativa.
+
+>Implementação de Modo Escuro (Dark Mode) nativo para economia de bateria e conforto visual.
+
+RNF-008 Conformidade
+
+>Total conformidade com a LGPD (Lei Geral de Proteção de Dados).
+
+>Funções nativas para exportação ou exclusão definitiva de todos os dados do usuário a qualquer momento.
+
+RNF-009 Capacidade
+
+>O banco de dados deve ser otimizado para suportar mais de 500 registros de transações por família com indexação de alta performance.
