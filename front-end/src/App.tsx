@@ -7,7 +7,7 @@ function App() {
         </h1>
 
         <p className="text-red-800 text-xl mb-6">
-          Se você está vendo isso estilizado, deu certo.
+          Se você está vendo isso estilizado, deu certo
         </p>
       </div>
     </div>
