@@ -1,17 +1,26 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
+import HomePage from './pages/home/HomePage'
+import LoginPage from './pages/login/LoginPage'
+import RegisterPage from './pages/register/RegisterPage'
+import DespesasPage from './pages/despesas/DespesasPage'
+import PatrimonioPage from './pages/patrimonio/PatrimonioPage'
+import NotFoundPage from './pages/not-found/NotFoundPage'
+
 function App() {
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="bg-blue-500 p-10 rounded-2xl shadow-2xl text-center">
-        <h1 className="text-xl font-bold text-white underline mb-4">
-          Tailwind Funcionando 🚀
-        </h1>
-
-        <p className="text-red-800 text-xl mb-6">
-          Se você está vendo isso estilizado, deu certo
-        </p>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/despesas" element={<DespesasPage />} />
+        <Route path="/patrimonio" element={<PatrimonioPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
 export default App
+
