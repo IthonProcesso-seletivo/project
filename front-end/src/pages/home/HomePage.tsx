@@ -1,5 +1,4 @@
 
-import DespesasPage from './../despesas/DespesasPage';
 import { Link } from 'react-router-dom';
 
 export default function HomePage() {
@@ -10,9 +9,7 @@ export default function HomePage() {
         <img src="" alt="Logo do site" />
       </div>
       <div>
-        <Link to={HomePage}>Home</Link>
-        <a href="HomePage">Home</a>
-        <a href="DespesasPage">Despesas</a>
+        <Link className='bg-blue-100' to=''>Home</Link>
       </div>
       <h2>Olá pessoal</h2>
 
