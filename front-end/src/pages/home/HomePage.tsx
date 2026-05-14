@@ -1,21 +1,12 @@
 
-import { Link } from 'react-router-dom';
+import Header from '../../components/home/Header';
 
-export default function HomePage() {
+function HomePage() {
   return (
-    <div>
-
-      <div className='bg-[#2D815D]'>
-        <img src="" alt="Logo do site" />
-      </div>
-      <div>
-        <Link className='bg-blue-100' to=''>Home</Link>
-      </div>
-      <h2>Olá pessoal</h2>
-
+    <div className='min-h-screen bg-[#EAF0EA]'>
+      <Header />
     </div>
-
-
   )
 }
 
+export default HomePage;
