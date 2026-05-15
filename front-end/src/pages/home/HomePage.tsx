@@ -1,11 +1,5 @@
 import { useState } from "react";
-import { PlusCircle, Trash2, Home, Menu, TrendingUp } from "lucide-react";
-
-const Colors = {
-  Primaria: "#2D815D";
-  
-
-};
+import { PlusCircle, Trash2, Menu } from "lucide-react";
 
 const DonutChart = ({ total, spent }) => {
   const radius = 54;
@@ -32,16 +26,16 @@ const DonutChart = ({ total, spent }) => {
           strokeDashoffset={circ / 4 - availDash}
           strokeLinecap="round"
         />
-        <text x="70" y="66" textAnchor="middle" fill="#166534" fontSize="13" fontWeight="700" fontFamily="'DM Sans', sans-serif">
-          R${(total - spent).toLocaleString("pt-BR")}
-        </text>
-        <text x="70" y="82" textAnchor="middle" fill="#6b7280" fontSize="10" fontFamily="'DM Sans', sans-serif">
-          disponível
-        </text>
       </svg>
-      <div className="flex gap-4 text-xs">
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-green-600 inline-block" />Total disponível: {total}</span>
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />Total gasto: {spent}</span>
+      <div className="flex flex-col gap-1.5 text-xs self-start px-2">
+        <span className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-green-600 inline-block shrink-0" />
+          Total disponivel : {total}
+        </span>
+        <span className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-red-500 inline-block shrink-0" />
+          Total gasto : {spent}
+        </span>
       </div>
     </div>
   );
@@ -52,21 +46,20 @@ const HorizontalBar = ({ label, value, max, color }) => {
   return (
     <div className="flex items-center gap-2 mb-3">
       <span className="text-xs text-gray-500 w-16 text-right shrink-0">{label}</span>
-      <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div className="flex-1 bg-gray-100 rounded-sm h-5 overflow-hidden">
         <div
-          className="h-full rounded-full transition-all duration-700"
+          className="h-full rounded-sm transition-all duration-700"
           style={{ width: `${pct}%`, backgroundColor: color }}
         />
       </div>
-      <span className="text-xs text-gray-600 w-10 text-right shrink-0">R${(value / 1000).toFixed(0)}K</span>
     </div>
   );
 };
 
 const Card = ({ title, children, className = "" }) => (
-  <div className={`bg-white rounded-2xl shadow-sm border border-green-50 p-4 flex flex-col gap-3 ${className}`}>
+  <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-3 ${className}`}>
     <div className="flex justify-center">
-      <span className="bg-green-700 text-white text-sm font-semibold px-5 py-1.5 rounded-full tracking-wide shadow-sm">
+      <span className="bg-green-700 text-white text-sm font-semibold px-6 py-2 rounded-xl tracking-wide shadow-sm w-full text-center">
         {title}
       </span>
     </div>
@@ -74,20 +67,66 @@ const Card = ({ title, children, className = "" }) => (
   </div>
 );
 
-const TableRow = ({ cols }) => (
-  <div className="flex items-center justify-between text-sm text-gray-700 py-2 border-b border-gray-50 last:border-0">
-    {cols.map((col, i) => (
-      <span key={i} className={`${i === 0 ? "w-24" : "flex-1 text-center"} ${i === cols.length - 1 ? "text-right font-medium text-green-800" : ""}`}>
-        {col}
-      </span>
-    ))}
-  </div>
-);
-
 const AddButton = ({ label }) => (
   <button className="mt-auto flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 active:scale-95 text-white text-sm font-semibold py-2.5 rounded-xl w-full transition-all duration-150 shadow-sm">
     {label} <PlusCircle size={16} />
   </button>
+);
+
+const GastosFixosContent = ({ gastosFixos }) => (
+  <div className="flex-1 space-y-1">
+    {gastosFixos.map((g, i) => (
+      <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0 gap-2">
+        <span className="w-16 font-medium text-gray-800 shrink-0">{g.nome}</span>
+        <span className="flex-1 text-center text-gray-600">{g.categoria}</span>
+        <span className="text-gray-800 font-medium shrink-0">{g.valor}</span>
+        <span className="text-xs text-gray-500 w-10 text-right shrink-0">{g.parcelas}</span>
+      </div>
+    ))}
+  </div>
+);
+
+const GastosVariaveisContent = ({ gastosVariaveis }) => (
+  <div className="flex-1 space-y-1">
+    {gastosVariaveis.map((g, i) => (
+      <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0 gap-2">
+        <span className="w-16 font-medium text-gray-800 shrink-0">{g.nome}</span>
+        <span className="flex-1 text-center text-gray-600">{g.categoria}</span>
+        <span className="text-gray-800 font-medium text-right shrink-0">{g.valor}</span>
+      </div>
+    ))}
+  </div>
+);
+
+const PatrimonioContent = ({ patrimonio }) => (
+  <>
+    <div className="grid grid-cols-3 text-xs font-semibold text-green-700 border border-green-200 rounded-lg px-3 py-1.5 bg-green-50">
+      <span>Valor</span>
+      <span className="text-center">Tipo</span>
+      <span className="text-right">Nome</span>
+    </div>
+    <div className="flex-1">
+      {patrimonio.map((item, i) => (
+        <div key={i} className="grid grid-cols-3 items-center text-sm text-gray-700 py-2.5 border-b border-gray-100 last:border-0">
+          <span className="text-gray-800 font-medium text-xs">{item.valor}</span>
+          <span className="text-center font-bold">{item.tipo}</span>
+          <span className="text-right font-bold">{item.nome}</span>
+        </div>
+      ))}
+    </div>
+  </>
+);
+
+const SalarioGastoContent = () => (
+  <div className="flex-1 px-2 pt-1">
+    <HorizontalBar label="Fixos" value={18000} max={20000} color="#16a34a" />
+    <HorizontalBar label="Variáveis" value={9000} max={20000} color="#16a34a" />
+    <div className="flex justify-between text-xs text-gray-400 mt-1 ml-[4.5rem]">
+      {["4K", "8K", "12K", "16K", "20k"].map((v) => (
+        <span key={v}>{v}</span>
+      ))}
+    </div>
+  </div>
 );
 
 export default function FamigestaoHome() {
@@ -111,93 +150,111 @@ export default function FamigestaoHome() {
   return (
     <div className="min-h-screen bg-[#e8f0ea] font-['DM_Sans',sans-serif]">
       {/* Navbar */}
-      <nav className="bg-green-800 px-6 py-3 flex items-center justify-between shadow-md">
+      <nav className="bg-green-800 px-4 sm:px-6 py-3 flex items-center justify-between shadow-md">
         <div className="flex items-center gap-2">
-          <img src="../assets/Logo.png" alt="logo do site" />
+          <img
+            src="./assets/Logo.png"
+            alt="FamiGestão"
+            onError={(e) => {  }}
+          />
+          <span className="text-white font-bold text-base tracking-widest">FAMIGESTÃO</span>
         </div>
-        <div className="flex bg-white/10 rounded-full p-1 gap-1">
-          {[{ key: "home", icon: <Home size={14} />, label: "Home" }, { key: "menu", icon: <Menu size={14} />, label: "Menu" }].map(tab => (
+
+        {/* Desktop: Home + Menu pills */}
+        <div className="hidden sm:flex border border-white/40 rounded-xl overflow-hidden">
+          {[{ key: "home", label: "Home" }, { key: "menu", label: "Menu" }].map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === tab.key ? "bg-white text-green-800 shadow" : "text-white/80 hover:text-white"}`}
+              className={`px-6 py-1.5 text-sm font-semibold transition-all duration-200 ${
+                activeTab === tab.key ? "bg-white/20 text-white" : "text-white/80 hover:text-white"
+              }`}
             >
-              {tab.icon}{tab.label}
+              {tab.label}
             </button>
           ))}
         </div>
+
+        {/* Mobile: hamburger */}
+        <button className="sm:hidden text-white" onClick={() => setActiveTab(activeTab === "menu" ? "home" : "menu")}>
+          <Menu size={22} />
+        </button>
       </nav>
 
-      {/* Grid */}
-      <main className="p-5 grid grid-cols-3 grid-rows-2 gap-4 max-w-5xl mx-auto">
-
-        {/* Patrimônio */}
-        <Card title="Patrimônio" className="row-span-2">
-          <div className="grid grid-cols-3 text-xs font-semibold text-green-700 border border-green-200 rounded-lg px-3 py-1.5 bg-green-50">
-            <span>Valor</span>
-            <span className="text-center">Tipo</span>
-            <span className="text-right">Nome</span>
-          </div>
-          <div className="flex-1">
-            {patrimonio.map((item, i) => (
-              <div key={i} className="grid grid-cols-3 items-center text-sm text-gray-700 py-2.5 border-b border-gray-100 last:border-0">
-                <span className="text-green-800 font-medium text-xs">{item.valor}</span>
-                <span className="text-center">{item.tipo}</span>
-                <span className="text-right">{item.nome}</span>
-              </div>
-            ))}
-          </div>
-          <AddButton label="Adicionar Patrimônio" />
-        </Card>
-
-        {/* Gastos Fixos */}
-        <Card title="Gastos Fixos">
-          <div className="flex-1 space-y-1">
-            {gastosFixos.map((g, i) => (
-              <div key={i} className="flex items-center justify-between text-sm text-gray-700 py-2 border-b border-gray-50 last:border-0">
-                <span className="w-20 font-medium text-gray-800">{g.nome}</span>
-                <span className="flex-1 text-center text-gray-500">{g.categoria}</span>
-                <span className="text-green-800 font-semibold w-20 text-right">{g.valor}</span>
-                <span className="text-xs text-gray-400 w-12 text-right">{g.parcelas}</span>
-              </div>
-            ))}
-          </div>
-          <AddButton label="Adicionar Gastos Fixos" />
-        </Card>
-
-        {/* Salário Restante */}
+      {/* ── MOBILE layout (< lg) ─────────────────────────────────────────── */}
+      {/* Order: Salário Restante → Salário Gasto → Gastos Fixos → Gastos Variáveis → Patrimônio */}
+      <main className="lg:hidden p-4 flex flex-col gap-4 max-w-md mx-auto">
         <Card title="Salário Restante">
           <DonutChart total={2500} spent={500} />
         </Card>
 
-        {/* Gastos Variáveis */}
+        <Card title="Salário Gasto">
+          <SalarioGastoContent />
+        </Card>
+
+        <Card title="Gastos Fixos">
+          <GastosFixosContent gastosFixos={gastosFixos} />
+          <AddButton label="Adicionar Gastos Fixos" />
+        </Card>
+
         <Card title="Gastos Variáveis">
-          <div className="flex-1 space-y-1">
-            {gastosVariaveis.map((g, i) => (
-              <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0">
-                <span className="w-20 font-medium text-gray-800">{g.nome}</span>
-                <span className="flex-1 text-center text-gray-500">{g.categoria}</span>
-                <span className="text-green-800 font-semibold text-right">{g.valor}</span>
-              </div>
-            ))}
-          </div>
+          <GastosVariaveisContent gastosVariaveis={gastosVariaveis} />
           <AddButton label="Adicionar Gastos Variáveis" />
         </Card>
 
-        {/* Salário Gasto */}
+        <Card title="Patrimônio">
+          <PatrimonioContent patrimonio={patrimonio} />
+          <AddButton label="Adicionar Patrimônio" />
+        </Card>
+
+        <div className="flex justify-end pb-2">
+          <button className="flex items-center gap-2 bg-green-700 hover:bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow transition-all duration-200 active:scale-95">
+            <Trash2 size={15} /> Excluir Conta
+          </button>
+        </div>
+      </main>
+
+      {/* ── DESKTOP layout (lg+) ─────────────────────────────────────────── */}
+      {/*
+        Grid 3 cols × 2 rows:
+          [Patrimônio row-span-2] [Gastos Fixos    ] [Salário Restante]
+          [                     ] [Gastos Variáveis] [Salário Gasto   ]
+      */}
+      <main
+        className="hidden lg:grid p-5 gap-4 max-w-5xl mx-auto"
+        style={{ gridTemplateColumns: "1fr 1fr 1fr", gridTemplateRows: "auto auto" }}
+      >
+        {/* Col 1 — Patrimônio (rows 1-2) */}
+        <Card title="Patrimônio" className="row-span-2">
+          <PatrimonioContent patrimonio={patrimonio} />
+          <AddButton label="Adicionar Patrimônio" />
+        </Card>
+
+        {/* Col 2, Row 1 — Gastos Fixos */}
+        <Card title="Gastos Fixos">
+          <GastosFixosContent gastosFixos={gastosFixos} />
+          <AddButton label="Adicionar Gastos Fixos" />
+        </Card>
+
+        {/* Col 3, Row 1 — Salário Restante */}
+        <Card title="Salário Restante">
+          <DonutChart total={2500} spent={500} />
+        </Card>
+
+        {/* Col 2, Row 2 — Gastos Variáveis */}
+        <Card title="Gastos Variáveis">
+          <GastosVariaveisContent gastosVariaveis={gastosVariaveis} />
+          <AddButton label="Adicionar Gastos Variáveis" />
+        </Card>
+
+        {/* Col 3, Row 2 — Salário Gasto */}
         <Card title="Salário Gasto">
-          <div className="flex-1 px-2 pt-1">
-            <HorizontalBar label="Fixos" value={18000} max={20000} color="#16a34a" />
-            <HorizontalBar label="Variáveis" value={9000} max={20000} color="#16a34a" />
-            <div className="flex justify-between text-xs text-gray-400 mt-2 px-1">
-              {["4K", "8K", "12K", "16K", "20K"].map(v => <span key={v}>{v}</span>)}
-            </div>
-          </div>
+          <SalarioGastoContent />
         </Card>
       </main>
 
-      {/* Footer */}
-      <div className="flex justify-end px-5 pb-5 max-w-5xl mx-auto">
+      {/* Footer desktop */}
+      <div className="hidden lg:flex justify-end px-5 pb-5 max-w-5xl mx-auto">
         <button className="flex items-center gap-2 bg-green-700 hover:bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow transition-all duration-200 active:scale-95">
           <Trash2 size={15} /> Excluir Conta
         </button>
