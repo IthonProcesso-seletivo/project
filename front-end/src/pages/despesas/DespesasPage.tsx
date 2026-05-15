@@ -281,18 +281,18 @@ export default function DespesasPage() {
         {/* Desktop */}
         <div
           className="hidden sm:flex items-center bg-[#89BFA1] p-1 gap-1"
-          style={{ borderRadius: 28 }}
+          style={{ borderRadius: 16 }}
         >
           <a
             href="/"
-            className="px-8 py-2 text-white hover:bg-white/10 transition-colors"
-            style={{ ...P, fontSize: 15, fontWeight: 500, borderRadius: 28 }}
+            className="px-8 py-2 text-green-900 hover:bg-white/10 transition-colors hover:text-white"
+            style={{ ...P, fontSize: 15, fontWeight: 500, borderRadius: 16 }}
           >
             Home
           </a>
           <span
             className="px-8 py-2 bg-[#2D815D] text-white"
-            style={{ ...P, fontSize: 15, fontWeight: 600, borderRadius: 28 }}
+            style={{ ...P, fontSize: 15, fontWeight: 600, borderRadius: 16 }}
           >
             Despesas
           </span>
@@ -345,7 +345,7 @@ export default function DespesasPage() {
               {/* Header verde */}
               <div
                 className="bg-[#2D815D] flex items-center px-4 py-2.5 gap-3 mb-3"
-                style={{ borderRadius: 16 }}
+                style={{ borderRadius: 23 }}
               >
                 <div className="flex-1 grid text-white" style={{ gridTemplateColumns: COL_GRID }}>
                   {COLUNAS.map(col => (
@@ -360,7 +360,7 @@ export default function DespesasPage() {
                   <button
                     onClick={() => setShowFilter(o => !o)}
                     className="w-full flex items-center justify-center gap-2 bg-[#89BFA1] hover:opacity-90 active:scale-95 transition-all py-1.5 px-3"
-                    style={{ ...P, fontSize: 15, fontWeight: 500, borderRadius: 28, color: "#103B22" }}
+                    style={{ ...P, fontSize: 15, fontWeight: 500, borderRadius: 16, color: "#103B22" }}
                   >
                     <span className="hidden sm:inline">Filtrar</span>
                     <SlidersHorizontal className="inline sm:hidden"size={14} color="#103B22" />
