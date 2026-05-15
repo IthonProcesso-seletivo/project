@@ -360,7 +360,7 @@ export default function DespesasPage() {
                   <button
                     onClick={() => setShowFilter(o => !o)}
                     className="w-full flex items-center justify-center gap-2 bg-[#89BFA1] hover:opacity-90 active:scale-95 transition-all py-1.5 px-3"
-                    style={{ ...P, fontSize: 15, fontWeight: 500, borderRadius: 16, color: "#103B22" }}
+                    style={{ ...P, fontSize: 15, fontWeight: 300, borderRadius: 16, color: "#103B22" }}
                   >
                     <span className="hidden sm:inline">Filtrar</span>
                     <SlidersHorizontal className="inline sm:hidden"size={14} color="#103B22" />
@@ -446,7 +446,7 @@ export default function DespesasPage() {
 
         {/* ── Relatório mensal ─────────────────────────────────────────── */}
         <div
-          className="p-4 flex flex-col gap-5"
+          className="flex flex-col gap-5"
           style={{ borderRadius: 32,}}
         >
           <div className="flex justify-center">
