@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate} from "react-router-dom";
-import Header from "../../components/home/Header";
+import famigestaoLogo from "./assets/famigestao-logo.png";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // ─── Constants & Types ────────────────────────────────────────────────────────
 
@@ -20,7 +20,7 @@ type PatrimonioTipo =
   | "Equipamento"
   | "Outros";
 
-
+type NavItem = "Home" | "Despesas";
 
 const TIPOS: PatrimonioTipo[] = [
   "Imóvel",
@@ -153,7 +153,33 @@ const ArrowLeftIcon = () => (
   </svg>
 );
 
+const HomeIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+    <polyline points="9 22 9 12 15 12 15 22" />
+  </svg>
+);
 
+// ─── Logo ─────────────────────────────────────────────────────────────────────
+
+const FamigestaoLogo = () => (
+  <img
+    src={famigestaoLogo}
+    alt="Famigestão"
+    style={{ height: 44, width: "auto", objectFit: "contain" }}
+  />
+);
+
+// ─── UI Primitives ────────────────────────────────────────────────────────────
 
 interface FormFieldProps {
   label: string;
@@ -325,9 +351,20 @@ const Dropdown = ({ value, onChange }: DropdownProps) => {
   );
 };
 
+// ─── Nav Routes ───────────────────────────────────────────────────────────────
 
-interface BackButtonProps {
-  onClick?: () => void;
+const NAV_ROUTES: Record<NavItem, string> = {
+  Home: "/",
+  Despesas: "/despesas",
+};
+
+// ─── Nav Button ───────────────────────────────────────────────────────────────
+
+interface NavButtonProps {
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+  icon?: React.ReactNode;
 }
 
 const NavButton = ({ label, isActive, onClick, icon }: NavButtonProps) => (
@@ -336,8 +373,8 @@ const NavButton = ({ label, isActive, onClick, icon }: NavButtonProps) => (
     className="flex items-center gap-1.5 px-5 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer border-none"
     style={
       isActive
-        ? { background: "white", color: COLORS.primaryDark }
-        : { background: "transparent", color: "rgba(255,255,255,0.75)" }
+        ? { background: COLORS.primary , color: "white" }
+        : { background: "transparent", color: "rgb(255, 255, 255)" }
     }
     onMouseEnter={(e) => {
       if (!isActive) e.currentTarget.style.color = "white";
@@ -373,7 +410,7 @@ const Navbar = () => {
 
       <div
         className="flex gap-1 rounded-xl p-1"
-        style={{ background: "rgba(255,255,255,0.12)" }}
+        style={{ background: "#89BFA1" }}
       >
         {(["Home", "Despesas"] as NavItem[]).map((nav) => (
           <NavButton
@@ -509,7 +546,7 @@ export default function CadastrarPatrimonio() {
       className="min-h-screen flex flex-col font-sans"
       style={{ background: COLORS.primaryLight }}
     >
-      <Header />
+      <Navbar />
 
       <div className="flex-1 flex items-center justify-center px-4 py-10 relative">
         <BackButton onClick={() => navigate(-1)} />
