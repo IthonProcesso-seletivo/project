@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { PlusCircle, Trash2, Menu, X, Lock, TrendingUp, User, Tag, DollarSign, Calendar, Check, RefreshCw } from "lucide-react";
-import famigestaoLogo from "../../assets/Logo.png";
+import { PlusCircle, Trash2, X, Lock, TrendingUp, User, Tag, DollarSign, Calendar, Check, RefreshCw, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
-import { PlusCircle, Trash2} from "lucide-react";
 import Header from "../../components/home/Header";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -56,7 +54,134 @@ const blurGray = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => 
   e.currentTarget.style.borderColor = COLORS.primaryBorder;
 };
 
-// ─── Toggle Fixo / Variável (shared) ─────────────────────────────────────────
+// ─── Mini Modal Extra Confirmação ────────────────────────────────────────────
+
+const ExcluirContaMiniModal = ({
+  onClose,
+  onConfirm,
+}: {
+  onClose: () => void;
+  onConfirm: () => void;
+}) => (
+  <div
+    className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+    style={{ backgroundColor: "rgba(0,0,0,0.55)", backdropFilter: "blur(3px)" }}
+    onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+  >
+    <div className="bg-white rounded-2xl w-full max-w-xs shadow-2xl overflow-hidden">
+      {/* Header verde */}
+      <div
+        className="px-5 py-3.5 flex items-center justify-center"
+        style={{ background: COLORS.primary }}
+      >
+        <h2 className="text-sm font-extrabold text-white tracking-wide uppercase">
+          ATENÇÃO:
+        </h2>
+      </div>
+
+      {/* Body */}
+      <div className="px-5 py-5 flex flex-col items-center gap-4">
+        <p className="text-gray-800 font-semibold text-sm text-center">
+          Excluir conta permanentemente?
+        </p>
+
+        <div className="flex gap-3 w-full">
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="flex-1 py-2.5 rounded-xl text-white text-sm font-bold transition-all duration-200 active:scale-95 hover:opacity-90"
+            style={{ background: "#dc2626" }}
+          >
+            Confirmar
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 py-2.5 rounded-xl text-white text-sm font-bold transition-all duration-200 active:scale-95 hover:opacity-90"
+            style={{ background: COLORS.primary }}
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Modal Excluir Conta ──────────────────────────────────────────────────────
+
+const ExcluirContaModal = ({
+  onClose,
+  onConfirm,
+}: {
+  onClose: () => void;
+  onConfirm: () => void;
+}) => {
+  const [showMini, setShowMini] = useState(false);
+
+  return (
+    <>
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ backgroundColor: "rgba(0,0,0,0.55)", backdropFilter: "blur(3px)" }}
+        onClick={(e) => { if (e.target === e.currentTarget && !showMini) onClose(); }}
+      >
+        <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
+          {/* Header verde */}
+          <div
+            className="px-5 py-4 flex items-center justify-center"
+            style={{ background: COLORS.primary }}
+          >
+            <h2 className="text-base font-extrabold text-white tracking-wide uppercase">
+              ATENÇÃO:
+            </h2>
+          </div>
+
+          {/* Body */}
+          <div className="px-6 py-6 flex flex-col items-center gap-5">
+            <div className="text-center flex flex-col gap-2">
+              <p className="text-gray-800 font-semibold text-sm">
+                Excluir conta permanentemente?
+              </p>
+              <p className="text-gray-600 text-sm leading-relaxed hidden sm:block">
+                Esta ação não poderá ser desfeita. Você perderá todos os dados vinculados a este arquivo.
+              </p>
+            </div>
+
+            {/* Botões */}
+            <div className="flex gap-3 w-full">
+              <button
+                type="button"
+                onClick={() => setShowMini(true)}
+                className="flex-1 py-3 rounded-xl text-white text-sm font-bold transition-all duration-200 active:scale-95 hover:opacity-90"
+                style={{ background: "#dc2626" }}
+              >
+                Confirmar
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 py-3 rounded-xl text-white text-sm font-bold transition-all duration-200 active:scale-95 hover:opacity-90"
+                style={{ background: COLORS.primary }}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {showMini && (
+        <ExcluirContaMiniModal
+          onClose={() => setShowMini(false)}
+          onConfirm={onConfirm}
+        />
+      )}
+    </>
+  );
+};
+
+// ─── Toggle Fixo / Variável ───────────────────────────────────────────────────
 
 const TipoToggle = ({
   value,
@@ -95,11 +220,12 @@ const TipoToggle = ({
 const GastosFixosModal = ({
   onClose,
   onAdd,
+  onSwitchToVariavel,
 }: {
   onClose: () => void;
   onAdd: (g: GastoFixo) => void;
+  onSwitchToVariavel: () => void;
 }) => {
-  const [tipo, setTipo] = useState<"Fixo" | "Variável">("Fixo");
   const [familiar, setFamiliar] = useState("");
   const [setor, setSetor] = useState("");
   const [valor, setValor] = useState("");
@@ -133,11 +259,9 @@ const GastosFixosModal = ({
           </button>
         </div>
 
-        <TipoToggle value={tipo} onChange={setTipo} />
+        <TipoToggle value="Fixo" onChange={(v) => { if (v === "Variável") onSwitchToVariavel(); }} />
 
         <div className="px-5 pb-5 flex flex-col gap-4">
-
-          {/* Familiar */}
           <div>
             <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
               <User size={13} style={{ color: COLORS.primary }} /> Familiar
@@ -155,7 +279,6 @@ const GastosFixosModal = ({
             </select>
           </div>
 
-          {/* Setor + Valor */}
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
@@ -195,7 +318,6 @@ const GastosFixosModal = ({
             </div>
           </div>
 
-          {/* Período + Data lado a lado */}
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
@@ -229,7 +351,6 @@ const GastosFixosModal = ({
             </div>
           </div>
 
-          {/* Submit */}
           <button
             type="button"
             onClick={handleSubmit}
@@ -254,11 +375,12 @@ const GastosFixosModal = ({
 const GastosVariaveisModal = ({
   onClose,
   onAdd,
+  onSwitchToFixo,
 }: {
   onClose: () => void;
   onAdd: (g: GastoVariavel) => void;
+  onSwitchToFixo: () => void;
 }) => {
-  const [tipo, setTipo] = useState<"Fixo" | "Variável">("Variável");
   const [familiar, setFamiliar] = useState("");
   const [setor, setSetor] = useState("");
   const [valor, setValor] = useState("");
@@ -292,11 +414,9 @@ const GastosVariaveisModal = ({
           </button>
         </div>
 
-        <TipoToggle value={tipo} onChange={setTipo} />
+        <TipoToggle value="Variável" onChange={(v) => { if (v === "Fixo") onSwitchToFixo(); }} />
 
         <div className="px-5 pb-5 flex flex-col gap-4">
-
-          {/* Familiar */}
           <div>
             <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
               <User size={13} style={{ color: COLORS.primary }} /> Familiar
@@ -314,7 +434,6 @@ const GastosVariaveisModal = ({
             </select>
           </div>
 
-          {/* Setor + Valor */}
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
@@ -354,7 +473,6 @@ const GastosVariaveisModal = ({
             </div>
           </div>
 
-          {/* Data */}
           <div>
             <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
               <Calendar size={13} style={{ color: COLORS.primary }} /> Data
@@ -370,7 +488,6 @@ const GastosVariaveisModal = ({
             />
           </div>
 
-          {/* Gasto único toggle */}
           <button
             type="button"
             onClick={() => setGastoUnico((v) => !v)}
@@ -385,7 +502,6 @@ const GastosVariaveisModal = ({
             Gasto único ou eventual
           </button>
 
-          {/* Submit */}
           <button
             type="button"
             onClick={handleSubmit}
@@ -543,9 +659,53 @@ export default function FamigestaoHome() {
     { nome: "Helena", categoria: "shopping", valor: "R$900,00" },
   ]);
 
+  // ── Estados dos modais ────────────────────────────────────────────────────
+  const [showModalFixos, setShowModalFixos] = useState(false);
+  const [showModalVariaveis, setShowModalVariaveis] = useState(false);
+  const [showModalExcluir, setShowModalExcluir] = useState(false);
+
+  // ── Handlers para trocar entre modais via toggle ──────────────────────────
+  const handleSwitchToVariavel = () => {
+    setShowModalFixos(false);
+    setShowModalVariaveis(true);
+  };
+
+  const handleSwitchToFixo = () => {
+    setShowModalVariaveis(false);
+    setShowModalFixos(true);
+  };
+
+  const handleConfirmarExclusao = () => {
+    // Lógica de exclusão de conta aqui
+    setShowModalExcluir(false);
+    console.log("Conta excluída");
+  };
+
   return (
     <div className="min-h-screen bg-[#e8f0ea] font-['DM_Sans',sans-serif]">
       <Header />
+
+      {/* ── Modais ── */}
+      {showModalFixos && (
+        <GastosFixosModal
+          onClose={() => setShowModalFixos(false)}
+          onAdd={(g) => setGastosFixos((prev) => [...prev, g])}
+          onSwitchToVariavel={handleSwitchToVariavel}
+        />
+      )}
+      {showModalVariaveis && (
+        <GastosVariaveisModal
+          onClose={() => setShowModalVariaveis(false)}
+          onAdd={(g) => setGastosVariaveis((prev) => [...prev, g])}
+          onSwitchToFixo={handleSwitchToFixo}
+        />
+      )}
+      {showModalExcluir && (
+        <ExcluirContaModal
+          onClose={() => setShowModalExcluir(false)}
+          onConfirm={handleConfirmarExclusao}
+        />
+      )}
 
       {/* ── MOBILE ── */}
       <main className="lg:hidden p-4 flex flex-col gap-4 max-w-md mx-auto">
@@ -563,14 +723,17 @@ export default function FamigestaoHome() {
           <GastosVariaveisContent gastosVariaveis={gastosVariaveis} />
           <AddButton label="Adicionar Gastos Variáveis" onClick={() => setShowModalVariaveis(true)} />
         </Card>
-        <Link to="/patrimonio">
-          <Card title="Patrimônio">
-            <PatrimonioContent patrimonio={patrimonio} />
+        <Card title="Patrimônio">
+          <PatrimonioContent patrimonio={patrimonio} />
+            <Link to="/patrimonio">
             <AddButton label="Adicionar Patrimônio" />
-          </Card>
-        </Link>
+          </Link>
+        </Card>
         <div className="flex justify-end pb-2">
-          <button className="flex items-center gap-2 bg-green-700 hover:bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow transition-all duration-200 active:scale-95">
+          <button
+            onClick={() => setShowModalExcluir(true)}
+            className="flex items-center gap-2 bg-green-700 hover:bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow transition-all duration-200 active:scale-95"
+          >
             <Trash2 size={15} /> Excluir Conta
           </button>
         </div>
@@ -581,12 +744,12 @@ export default function FamigestaoHome() {
         className="hidden lg:grid p-5 gap-4 max-w-5xl mx-auto"
         style={{ gridTemplateColumns: "1fr 1fr 1fr", gridTemplateRows: "auto auto" }}
       >
-        <Link to="/patrimonio">
-          <Card title="Patrimônio" className="row-span-2">
-            <PatrimonioContent patrimonio={patrimonio} />
+        <Card title="Patrimônio" className="row-span-2">
+          <PatrimonioContent patrimonio={patrimonio} />
+          <Link to="/patrimonio">
             <AddButton label="Adicionar Patrimônio" />
-          </Card>
-        </Link>
+          </Link>
+        </Card>
 
         <Card title="Gastos Fixos">
           <GastosFixosContent gastosFixos={gastosFixos} />
@@ -608,7 +771,10 @@ export default function FamigestaoHome() {
       </main>
 
       <div className="hidden lg:flex justify-end px-5 pb-5 max-w-5xl mx-auto">
-        <button className="flex items-center gap-2 bg-green-700 hover:bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow transition-all duration-200 active:scale-95">
+        <button
+          onClick={() => setShowModalExcluir(true)}
+          className="flex items-center gap-2 bg-green-700 hover:bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow transition-all duration-200 active:scale-95"
+        >
           <Trash2 size={15} /> Excluir Conta
         </button>
       </div>

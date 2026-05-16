@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import famigestaoLogo from "./assets/famigestao-logo.png";
 
 export default function LoginPage() {
-  // Estado para controlar a visibilidade da senha
   const [showPassword, setShowPassword] = useState(false)
 
   return (
@@ -10,11 +10,11 @@ export default function LoginPage() {
 
       {/* HEADER */}
       <header className="w-full bg-[#2D815D] h-32 relative flex justify-center mb-24">
-        
+
         {/* LOGO CONTAINER */}
         <div className="absolute top-full -translate-y-1/2 w-40 h-36 bg-[#2D815D] rounded-b-[36px] shadow-md overflow-hidden flex items-center justify-center">
           <img
-            src="/logo.jpeg"
+            src={famigestaoLogo}
             alt="Famigestão"
             className="w-full h-full object-cover"
           />
@@ -73,19 +73,31 @@ export default function LoginPage() {
               </button>
             </div>
             <Link
-              to="/forgot"
+              to="/home"
               className="text-xs text-gray-600 underline ml-2 mt-1 hover:text-[#2D815D] transition-colors"
             >
               Esqueci minha senha
             </Link>
           </div>
 
-        <p className="text-gray-300 text-sm mt-6">
+          {/* BOTÃO SUBMIT */}
+          <button
+            type="submit"
+            className="w-full rounded-full bg-[#2D815D] hover:bg-[#1e5c40] active:scale-95 text-white font-bold py-3 mt-2 transition-all duration-200 shadow-sm"
+          >
+            Entrar
+          </button>
+
+        </form>{/* FIX: form fechado corretamente */}
+
+        {/* FIX: text-gray-500 para garantir legibilidade */}
+        <p className="text-gray-500 text-sm mt-6">
           Não tem conta?{' '}
-          <Link className="text-blue-300 hover:underline" to="/home">
+          <Link className="text-[#2D815D] font-semibold hover:underline" to="/register">
             Criar agora
           </Link>
         </p>
+
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import famigestaoLogo from "./assets/famigestao-logo.png";
 
 export default function RegisterPage() {
   // Estados para as duas senhas independentes
@@ -15,7 +16,7 @@ export default function RegisterPage() {
         {/* LOGO CONTAINER */}
         <div className="absolute top-full -translate-y-1/2 w-40 h-36 bg-[#2D815D] rounded-b-[36px] shadow-md overflow-hidden flex items-center justify-center">
           <img
-            src="/logo.jpeg"
+            src={famigestaoLogo}
             alt="Famigestão"
             className="w-full h-full object-cover"
           />
@@ -26,7 +27,7 @@ export default function RegisterPage() {
       {/* CONTAINER RESPONSIVO DO BOTÃO DE VOLTAR */}
       <div className="w-full max-w-5xl px-6 md:px-12 absolute top-36 left-0 right-0 mx-auto pointer-events-none">
         <Link 
-          to="/login" 
+          to="/" 
           className="pointer-events-auto inline-flex bg-[#2D815D] w-10 h-10 rounded-full text-white hover:bg-[#2D815D] hover:opacity-90 transition shadow-md items-center justify-center"
           aria-label="Voltar para o login"
         >

@@ -196,7 +196,6 @@ const FormField = ({ label, icon, children }: FormFieldProps) => (
       {icon}
       {label}
     </label>
-
     {children}
   </div>
 );
@@ -209,11 +208,7 @@ interface TextInputProps {
   placeholder?: string;
 }
 
-const TextInput = ({
-  value,
-  onChange,
-  placeholder,
-}: TextInputProps) => (
+const TextInput = ({ value, onChange, placeholder }: TextInputProps) => (
   <input
     type="text"
     value={value}
@@ -248,7 +243,6 @@ const CurrencyInput = ({ value, onChange }: CurrencyInputProps) => (
         border: `1.5px solid ${COLORS.primaryBorder}`,
       }}
     />
-
     <span
       className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold"
       style={{ color: COLORS.primary }}
@@ -266,11 +260,7 @@ interface SubmitButtonProps {
   onClick: () => void;
 }
 
-const SubmitButton = ({
-  isValid,
-  submitted,
-  onClick,
-}: SubmitButtonProps) => (
+const SubmitButton = ({ isValid, submitted, onClick }: SubmitButtonProps) => (
   <button
     type="button"
     onClick={onClick}
@@ -289,7 +279,6 @@ const SubmitButton = ({
     }
   >
     {submitted ? "Cadastrado com sucesso!" : "Confirmar Cadastro"}
-
     <CheckIcon />
   </button>
 );
@@ -311,12 +300,8 @@ const Dropdown = ({ value, onChange }: DropdownProps) => {
         setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handler);
-
-    return () => {
-      document.removeEventListener("mousedown", handler);
-    };
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   return (
@@ -327,15 +312,12 @@ const Dropdown = ({ value, onChange }: DropdownProps) => {
         className="w-full px-4 py-3.5 rounded-xl flex items-center justify-between cursor-pointer text-sm"
         style={{
           background: COLORS.primaryLight,
-          border: `1.5px solid ${
-            open ? COLORS.primary : COLORS.primaryBorder
-          }`,
+          border: `1.5px solid ${open ? COLORS.primary : COLORS.primaryBorder}`,
         }}
       >
         <span style={{ color: value ? "#1f2937" : "#9ca3af" }}>
           {value || "Selecione o tipo de patrimônio"}
         </span>
-
         <ChevronIcon open={open} />
       </button>
 
@@ -357,10 +339,7 @@ const Dropdown = ({ value, onChange }: DropdownProps) => {
               }}
               className="w-full px-4 py-3 text-left text-sm"
               style={{
-                background:
-                  value === tipo
-                    ? COLORS.primaryLight
-                    : "transparent",
+                background: value === tipo ? COLORS.primaryLight : "transparent",
               }}
             >
               {tipo}
@@ -415,10 +394,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  // FIX: "/" só faz match exato; outras rotas usam startsWith
   const activeNav =
     (Object.entries(NAV_ROUTES) as [NavItem, string][])
-      .find(([, path]) => pathname.startsWith(path))?.[0] ??
-    "Home";
+      .find(([, path]) =>
+        path === "/" ? pathname === "/" : pathname.startsWith(path)
+      )?.[0] ?? "Home";
 
   return (
     <nav
@@ -445,50 +426,19 @@ const Navbar = () => {
   );
 };
 
-// ─── Nav Button ───────────────────────────────────────────────────────────────
-
-interface NavButtonProps {
-  label: string;
-  isActive: boolean;
-  onClick: () => void;
-  icon?: React.ReactNode;
-}
-
-const NavButton = ({
-  label,
-  isActive,
-  onClick,
-  icon,
-}: NavButtonProps) => (
-  <button
-    onClick={onClick}
-    className="flex items-center gap-1.5 px-5 py-1.5 rounded-lg text-sm font-semibold"
-    style={
-      isActive
-        ? {
-            background: "white",
-            color: COLORS.primaryDark,
-          }
-        : {
-            background: "transparent",
-            color: "rgba(255,255,255,0.75)",
-          }
-    }
-  >
-    {icon}
-    {label}
-  </button>
-);
-
 // ─── Back Button ──────────────────────────────────────────────────────────────
 
-const BackButton = () => (
+// FIX: adicionada prop onClick
+interface BackButtonProps {
+  onClick: () => void;
+}
+
+const BackButton = ({ onClick }: BackButtonProps) => (
   <button
     type="button"
+    onClick={onClick}
     className="absolute top-8 left-8 w-10 h-10 rounded-xl border bg-white flex items-center justify-center"
-    style={{
-      borderColor: COLORS.primaryBorder,
-    }}
+    style={{ borderColor: COLORS.primaryBorder }}
   >
     <ArrowLeftIcon />
   </button>
@@ -507,11 +457,9 @@ const CardHeader = () => (
     >
       <BoxIcon />
     </div>
-
     <h1 className="text-xl font-bold text-gray-800 tracking-tight">
       Cadastrar Patrimônio
     </h1>
-
     <p className="text-sm text-gray-500 mt-2">
       Preencha as informações para adicionar um novo patrimônio.
     </p>
@@ -525,12 +473,8 @@ interface PatrimonioFormProps {
   submitted: boolean;
   isValid: boolean;
   onTipoChange: (v: PatrimonioTipo) => void;
-  onNomeChange: (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
-  onValorChange: (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
+  onNomeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onValorChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: () => void;
 }
 
@@ -545,10 +489,7 @@ const PatrimonioForm = ({
 }: PatrimonioFormProps) => (
   <div className="flex flex-col gap-5">
     <FormField label="Tipo" icon={<TypeIcon />}>
-      <Dropdown
-        value={form.tipo}
-        onChange={onTipoChange}
-      />
+      <Dropdown value={form.tipo} onChange={onTipoChange} />
     </FormField>
 
     <FormField label="Nome" icon={<NameIcon />}>
@@ -560,74 +501,45 @@ const PatrimonioForm = ({
     </FormField>
 
     <FormField label="Valor" icon={<ValueIcon />}>
-      <CurrencyInput
-        value={form.valor}
-        onChange={onValorChange}
-      />
+      <CurrencyInput value={form.valor} onChange={onValorChange} />
     </FormField>
 
-    <SubmitButton
-      isValid={isValid}
-      submitted={submitted}
-      onClick={onSubmit}
-    />
+    <SubmitButton isValid={isValid} submitted={submitted} onClick={onSubmit} />
   </div>
 );
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function CadastrarPatrimonio() {
-  const [form, setForm] = useState<FormState>({
-    tipo: "",
-    nome: "",
-    valor: "",
-  });
-
+  const [form, setForm] = useState<FormState>({ tipo: "", nome: "", valor: "" });
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
 
   const formatCurrency = (raw: string): string => {
     const digits = raw.replace(/\D/g, "");
-
     if (!digits) return "";
-
     const num = parseFloat(digits) / 100;
-
     return num.toLocaleString("pt-BR", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
   };
 
-  const handleValorChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setForm((f) => ({
-      ...f,
-      valor: formatCurrency(e.target.value),
-    }));
+  const handleValorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((f) => ({ ...f, valor: formatCurrency(e.target.value) }));
   };
 
   const handleSubmit = () => {
     if (!form.tipo || !form.nome || !form.valor) return;
-
     setSubmitted(true);
-
     setTimeout(() => {
       setSubmitted(false);
-
-      setForm({
-        tipo: "",
-        nome: "",
-        valor: "",
-      });
+      setForm({ tipo: "", nome: "", valor: "" });
     }, 2500);
   };
 
   const isValid =
-    form.tipo !== "" &&
-    form.nome.trim() !== "" &&
-    form.valor !== "";
+    form.tipo !== "" && form.nome.trim() !== "" && form.valor !== "";
 
   return (
     <div
@@ -637,7 +549,6 @@ export default function CadastrarPatrimonio() {
       <Navbar />
 
       <div className="flex-1 flex items-center justify-center px-4 py-10 relative">
-        
         <BackButton onClick={() => navigate(-1)} />
 
         <div className="bg-white rounded-2xl px-10 py-10 w-full max-w-md shadow-xl">
@@ -647,18 +558,8 @@ export default function CadastrarPatrimonio() {
             form={form}
             submitted={submitted}
             isValid={isValid}
-            onTipoChange={(v) =>
-              setForm((f) => ({
-                ...f,
-                tipo: v,
-              }))
-            }
-            onNomeChange={(e) =>
-              setForm((f) => ({
-                ...f,
-                nome: e.target.value,
-              }))
-            }
+            onTipoChange={(v) => setForm((f) => ({ ...f, tipo: v }))}
+            onNomeChange={(e) => setForm((f) => ({ ...f, nome: e.target.value }))}
             onValorChange={handleValorChange}
             onSubmit={handleSubmit}
           />
