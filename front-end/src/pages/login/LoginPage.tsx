@@ -80,20 +80,12 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          {/* BOTÕES */}
-          <div className="flex gap-4 mt-4">
-            <button type="submit" className="flex-1 rounded-full bg-[#2D815D] text-white py-3 font-bold hover:bg-[#2D815D] hover:opacity-90 transition shadow-md">
-              Entrar
-            </button>
-            <Link
-              to="/register"
-              className="flex-1 flex items-center justify-center rounded-full bg-white text-[#2D815D] border border-[#2D815D] py-3 font-bold hover:bg-gray-50 transition shadow-md text-center"
-            >
-              Registrar
-            </Link>
-          </div>
-
-        </form>
+        <p className="text-gray-300 text-sm mt-6">
+          Não tem conta?{' '}
+          <Link className="text-blue-300 hover:underline" to="/home">
+            Criar agora
+          </Link>
+        </p>
       </div>
     </div>
   )

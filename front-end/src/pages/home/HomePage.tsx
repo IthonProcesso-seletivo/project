@@ -1,42 +1,621 @@
-import { Link } from 'react-router-dom'
+import { useState } from "react";
+import { PlusCircle, Trash2, Menu, X, Lock, TrendingUp, User, Tag, DollarSign, Calendar, Check, RefreshCw } from "lucide-react";
+import famigestaoLogo from "../../assets/Logo.png";
+import { Link } from "react-router-dom";
+import { PlusCircle, Trash2} from "lucide-react";
+import Header from "../../components/home/Header";
 
-export default function HomePage() {
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const COLORS = {
+  primary: "#2D815D",
+  primaryDark: "#1e5c40",
+  primaryLight: "#EAF0EA",
+  primaryBorder: "#c2d9cb",
+} as const;
+
+const FAMILIARES = ["Ricardo", "Helena", "Lucas", "Zilma"];
+const PERIODOS = ["Mensal", "Semanal", "Quinzenal", "Anual"];
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface GastoFixo {
+  nome: string;
+  categoria: string;
+  valor: string;
+  parcelas: string;
+}
+
+interface GastoVariavel {
+  nome: string;
+  categoria: string;
+  valor: string;
+}
+
+// ─── Shared helpers ───────────────────────────────────────────────────────────
+
+const formatCurrency = (raw: string): string => {
+  const digits = raw.replace(/\D/g, "");
+  if (!digits) return "";
+  const num = parseFloat(digits) / 100;
+  return num.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
+
+const inputBase =
+  "w-full px-4 py-3 rounded-xl text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-colors duration-200";
+
+const inputSty = {
+  background: COLORS.primaryLight,
+  border: `1.5px solid ${COLORS.primaryBorder}`,
+};
+
+const focusGreen = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+  e.currentTarget.style.borderColor = COLORS.primary;
+};
+const blurGray = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+  e.currentTarget.style.borderColor = COLORS.primaryBorder;
+};
+
+// ─── Toggle Fixo / Variável (shared) ─────────────────────────────────────────
+
+const TipoToggle = ({
+  value,
+  onChange,
+}: {
+  value: "Fixo" | "Variável";
+  onChange: (v: "Fixo" | "Variável") => void;
+}) => (
+  <div className="px-5 pb-4">
+    <div
+      className="flex rounded-xl p-1 gap-1"
+      style={{ background: COLORS.primaryLight, border: `1.5px solid ${COLORS.primaryBorder}` }}
+    >
+      {(["Fixo", "Variável"] as const).map((t) => (
+        <button
+          key={t}
+          type="button"
+          onClick={() => onChange(t)}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
+          style={
+            value === t
+              ? { background: COLORS.primary, color: "white" }
+              : { background: "transparent", color: COLORS.primary }
+          }
+        >
+          {t === "Fixo" ? <Lock size={13} /> : <TrendingUp size={13} />}
+          {t}
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
+// ─── Modal Gastos Fixos ───────────────────────────────────────────────────────
+
+const GastosFixosModal = ({
+  onClose,
+  onAdd,
+}: {
+  onClose: () => void;
+  onAdd: (g: GastoFixo) => void;
+}) => {
+  const [tipo, setTipo] = useState<"Fixo" | "Variável">("Fixo");
+  const [familiar, setFamiliar] = useState("");
+  const [setor, setSetor] = useState("");
+  const [valor, setValor] = useState("");
+  const [periodo, setPeriodo] = useState("");
+  const [data, setData] = useState("");
+
+  const isValid = familiar !== "" && setor.trim() !== "" && valor !== "" && periodo !== "" && data !== "";
+
+  const handleSubmit = () => {
+    if (!isValid) return;
+    onAdd({ nome: familiar, categoria: setor, valor: `R$${valor}`, parcelas: periodo });
+    onClose();
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-6">
-      <div className="max-w-md w-full bg-gray-800 rounded-2xl shadow-2xl p-8 text-center">
-        <h1 className="text-2xl font-bold mb-3">Home</h1>
-        <p className="text-gray-300 mb-6">
-          Bem-vindo! Use o menu abaixo para navegar.
-        </p>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(0,0,0,0.45)", backdropFilter: "blur(2px)" }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
 
-        <div className="flex flex-col gap-3">
-          <Link
-            className="rounded-xl bg-blue-600 px-4 py-3 font-semibold hover:bg-blue-500 transition"
-            to="/login"
+        <div className="px-5 pt-5 pb-4 flex items-center justify-between">
+          <h2 className="text-base font-bold text-gray-800">Gastos Fixos</h2>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-white hover:opacity-80 transition-opacity"
+            style={{ background: COLORS.primary }}
           >
-            Ir para Login
-          </Link>
-          <Link
-            className="rounded-xl bg-cyan-600 px-4 py-3 font-semibold hover:bg-cyan-500 transition"
-            to="/register"
+            <X size={14} />
+          </button>
+        </div>
+
+        <TipoToggle value={tipo} onChange={setTipo} />
+
+        <div className="px-5 pb-5 flex flex-col gap-4">
+
+          {/* Familiar */}
+          <div>
+            <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+              <User size={13} style={{ color: COLORS.primary }} /> Familiar
+            </label>
+            <select
+              value={familiar}
+              onChange={(e) => setFamiliar(e.target.value)}
+              className={inputBase}
+              style={inputSty}
+              onFocus={focusGreen}
+              onBlur={blurGray}
+            >
+              <option value="">Selecione um familiar...</option>
+              {FAMILIARES.map((f) => <option key={f} value={f}>{f}</option>)}
+            </select>
+          </div>
+
+          {/* Setor + Valor */}
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                <Tag size={13} style={{ color: COLORS.primary }} /> Setor
+              </label>
+              <input
+                type="text"
+                placeholder="Ex. Moradia..."
+                value={setor}
+                onChange={(e) => setSetor(e.target.value)}
+                className={inputBase}
+                style={inputSty}
+                onFocus={focusGreen}
+                onBlur={blurGray}
+              />
+            </div>
+            <div className="w-32">
+              <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                <DollarSign size={13} style={{ color: COLORS.primary }} /> Valor
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold" style={{ color: COLORS.primary }}>
+                  R$
+                </span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="0,00"
+                  value={valor}
+                  onChange={(e) => setValor(formatCurrency(e.target.value))}
+                  className={`${inputBase} pl-9`}
+                  style={inputSty}
+                  onFocus={focusGreen}
+                  onBlur={blurGray}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Período + Data lado a lado */}
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                <RefreshCw size={13} style={{ color: COLORS.primary }} /> Período
+              </label>
+              <select
+                value={periodo}
+                onChange={(e) => setPeriodo(e.target.value)}
+                className={inputBase}
+                style={inputSty}
+                onFocus={focusGreen}
+                onBlur={blurGray}
+              >
+                <option value="">Mensal...</option>
+                {PERIODOS.map((p) => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </div>
+            <div className="flex-1">
+              <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                <Calendar size={13} style={{ color: COLORS.primary }} /> Data
+              </label>
+              <input
+                type="date"
+                value={data}
+                onChange={(e) => setData(e.target.value)}
+                className={inputBase}
+                style={inputSty}
+                onFocus={focusGreen}
+                onBlur={blurGray}
+              />
+            </div>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!isValid}
+            className="w-full py-3.5 mt-1 rounded-xl text-white text-sm font-bold flex items-center justify-center gap-2 transition-all duration-200"
+            style={
+              isValid
+                ? { background: `linear-gradient(135deg, ${COLORS.primaryDark}, ${COLORS.primary})`, boxShadow: `0 6px 20px ${COLORS.primary}40`, cursor: "pointer" }
+                : { background: "#d1d5db", cursor: "not-allowed" }
+            }
           >
-            Criar conta
-          </Link>
-          <Link
-            className="rounded-xl bg-emerald-600 px-4 py-3 font-semibold hover:bg-emerald-500 transition"
-            to="/despesas"
-          >
-            Ver Despesas
-          </Link>
-          <Link
-            className="rounded-xl bg-indigo-600 px-4 py-3 font-semibold hover:bg-indigo-500 transition"
-            to="/patrimonio"
-          >
-            Ver Patrimônio
-          </Link>
+            <Check size={16} /> Adicionar gasto
+          </button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
+// ─── Modal Gastos Variáveis ───────────────────────────────────────────────────
+
+const GastosVariaveisModal = ({
+  onClose,
+  onAdd,
+}: {
+  onClose: () => void;
+  onAdd: (g: GastoVariavel) => void;
+}) => {
+  const [tipo, setTipo] = useState<"Fixo" | "Variável">("Variável");
+  const [familiar, setFamiliar] = useState("");
+  const [setor, setSetor] = useState("");
+  const [valor, setValor] = useState("");
+  const [data, setData] = useState("");
+  const [gastoUnico, setGastoUnico] = useState(false);
+
+  const isValid = familiar !== "" && setor.trim() !== "" && valor !== "" && data !== "";
+
+  const handleSubmit = () => {
+    if (!isValid) return;
+    onAdd({ nome: familiar, categoria: setor, valor: `R$${valor}` });
+    onClose();
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(0,0,0,0.45)", backdropFilter: "blur(2px)" }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
+
+        <div className="px-5 pt-5 pb-4 flex items-center justify-between">
+          <h2 className="text-base font-bold text-gray-800">Gastos Variáveis</h2>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-white hover:opacity-80 transition-opacity"
+            style={{ background: COLORS.primary }}
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        <TipoToggle value={tipo} onChange={setTipo} />
+
+        <div className="px-5 pb-5 flex flex-col gap-4">
+
+          {/* Familiar */}
+          <div>
+            <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+              <User size={13} style={{ color: COLORS.primary }} /> Familiar
+            </label>
+            <select
+              value={familiar}
+              onChange={(e) => setFamiliar(e.target.value)}
+              className={inputBase}
+              style={inputSty}
+              onFocus={focusGreen}
+              onBlur={blurGray}
+            >
+              <option value="">Selecione um familiar...</option>
+              {FAMILIARES.map((f) => <option key={f} value={f}>{f}</option>)}
+            </select>
+          </div>
+
+          {/* Setor + Valor */}
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                <Tag size={13} style={{ color: COLORS.primary }} /> Setor
+              </label>
+              <input
+                type="text"
+                placeholder="Ex. Alimentação..."
+                value={setor}
+                onChange={(e) => setSetor(e.target.value)}
+                className={inputBase}
+                style={inputSty}
+                onFocus={focusGreen}
+                onBlur={blurGray}
+              />
+            </div>
+            <div className="w-32">
+              <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                <DollarSign size={13} style={{ color: COLORS.primary }} /> Valor
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold" style={{ color: COLORS.primary }}>
+                  R$
+                </span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="0,00"
+                  value={valor}
+                  onChange={(e) => setValor(formatCurrency(e.target.value))}
+                  className={`${inputBase} pl-9`}
+                  style={inputSty}
+                  onFocus={focusGreen}
+                  onBlur={blurGray}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Data */}
+          <div>
+            <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+              <Calendar size={13} style={{ color: COLORS.primary }} /> Data
+            </label>
+            <input
+              type="date"
+              value={data}
+              onChange={(e) => setData(e.target.value)}
+              className={inputBase}
+              style={inputSty}
+              onFocus={focusGreen}
+              onBlur={blurGray}
+            />
+          </div>
+
+          {/* Gasto único toggle */}
+          <button
+            type="button"
+            onClick={() => setGastoUnico((v) => !v)}
+            className="self-start flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200"
+            style={
+              gastoUnico
+                ? { background: COLORS.primary, color: "white" }
+                : { background: COLORS.primaryLight, color: COLORS.primary, border: `1px solid ${COLORS.primaryBorder}` }
+            }
+          >
+            {gastoUnico && <Check size={12} />}
+            Gasto único ou eventual
+          </button>
+
+          {/* Submit */}
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!isValid}
+            className="w-full py-3.5 mt-1 rounded-xl text-white text-sm font-bold flex items-center justify-center gap-2 transition-all duration-200"
+            style={
+              isValid
+                ? { background: `linear-gradient(135deg, ${COLORS.primaryDark}, ${COLORS.primary})`, boxShadow: `0 6px 20px ${COLORS.primary}40`, cursor: "pointer" }
+                : { background: "#d1d5db", cursor: "not-allowed" }
+            }
+          >
+            <Check size={16} /> Adicionar gasto
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Chart Components ─────────────────────────────────────────────────────────
+
+const DonutChart = ({ total, spent }: { total: number; spent: number }) => {
+  const radius = 54;
+  const circ = 2 * Math.PI * radius;
+  const pct = Math.min(spent / total, 1);
+  const spentDash = pct * circ;
+  const availDash = circ - spentDash;
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r={radius} fill="none" stroke="#d1fae5" strokeWidth="18" />
+        <circle cx="70" cy="70" r={radius} fill="none" stroke="#16a34a" strokeWidth="18"
+          strokeDasharray={`${availDash} ${spentDash}`} strokeDashoffset={circ / 4} strokeLinecap="round" />
+        <circle cx="70" cy="70" r={radius} fill="none" stroke="#ef4444" strokeWidth="18"
+          strokeDasharray={`${spentDash} ${availDash}`} strokeDashoffset={circ / 4 - availDash} strokeLinecap="round" />
+      </svg>
+      <div className="flex flex-col gap-1.5 text-xs self-start px-2">
+        <span className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-green-600 inline-block shrink-0" />
+          Total disponivel : {total}
+        </span>
+        <span className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-red-500 inline-block shrink-0" />
+          Total gasto : {spent}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const HorizontalBar = ({ label, value, max, color }: { label: string; value: number; max: number; color: string }) => {
+  const pct = Math.min((value / max) * 100, 100);
+  return (
+    <div className="flex items-center gap-2 mb-3">
+      <span className="text-xs text-gray-500 w-16 text-right shrink-0">{label}</span>
+      <div className="flex-1 bg-gray-100 rounded-sm h-5 overflow-hidden">
+        <div className="h-full rounded-sm transition-all duration-700" style={{ width: `${pct}%`, backgroundColor: color }} />
+      </div>
+    </div>
+  );
+};
+
+// ─── Card Components ──────────────────────────────────────────────────────────
+
+const Card = ({ title, children, className = "" }: { title: string; children: React.ReactNode; className?: string }) => (
+  <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-3 ${className}`}>
+    <div className="flex justify-center">
+      <span className="bg-green-700 text-white text-sm font-semibold px-6 py-2 rounded-xl tracking-wide shadow-sm w-full text-center">
+        {title}
+      </span>
+    </div>
+    {children}
+  </div>
+);
+
+const AddButton = ({ label, onClick }: { label: string; onClick?: () => void }) => (
+  <button
+    onClick={onClick}
+    className="mt-auto flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 active:scale-95 text-white text-sm font-semibold py-2.5 rounded-xl w-full transition-all duration-150 shadow-sm"
+  >
+    {label} <PlusCircle size={16} />
+  </button>
+);
+
+const GastosFixosContent = ({ gastosFixos }: { gastosFixos: GastoFixo[] }) => (
+  <div className="flex-1 space-y-1">
+    {gastosFixos.map((g, i) => (
+      <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0 gap-2">
+        <span className="w-16 font-medium text-gray-800 shrink-0">{g.nome}</span>
+        <span className="flex-1 text-center text-gray-600">{g.categoria}</span>
+        <span className="text-gray-800 font-medium shrink-0">{g.valor}</span>
+        <span className="text-xs text-gray-500 w-10 text-right shrink-0">{g.parcelas}</span>
+      </div>
+    ))}
+  </div>
+);
+
+const GastosVariaveisContent = ({ gastosVariaveis }: { gastosVariaveis: GastoVariavel[] }) => (
+  <div className="flex-1 space-y-1">
+    {gastosVariaveis.map((g, i) => (
+      <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0 gap-2">
+        <span className="w-16 font-medium text-gray-800 shrink-0">{g.nome}</span>
+        <span className="flex-1 text-center text-gray-600">{g.categoria}</span>
+        <span className="text-gray-800 font-medium text-right shrink-0">{g.valor}</span>
+      </div>
+    ))}
+  </div>
+);
+
+const PatrimonioContent = ({ patrimonio }: { patrimonio: { valor: string; tipo: string; nome: string }[] }) => (
+  <>
+    <div className="grid grid-cols-3 text-xs font-semibold text-green-700 border border-green-200 rounded-lg px-3 py-1.5 bg-green-50">
+      <span>Valor</span>
+      <span className="text-center">Tipo</span>
+      <span className="text-right">Nome</span>
+    </div>
+    <div className="flex-1">
+      {patrimonio.map((item, i) => (
+        <div key={i} className="grid grid-cols-3 items-center text-sm text-gray-700 py-2.5 border-b border-gray-100 last:border-0">
+          <span className="text-gray-800 font-medium text-xs">{item.valor}</span>
+          <span className="text-center font-bold">{item.tipo}</span>
+          <span className="text-right font-bold">{item.nome}</span>
+        </div>
+      ))}
+    </div>
+  </>
+);
+
+const SalarioGastoContent = () => (
+  <div className="flex-1 px-2 pt-1">
+    <HorizontalBar label="Fixos" value={18000} max={20000} color="#16a34a" />
+    <HorizontalBar label="Variáveis" value={9000} max={20000} color="#16a34a" />
+    <div className="flex justify-between text-xs text-gray-400 mt-1 ml-[4.5rem]">
+      {["4K", "8K", "12K", "16K", "20k"].map((v) => <span key={v}>{v}</span>)}
+    </div>
+  </div>
+);
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
+export default function FamigestaoHome() {
+  const patrimonio = [
+    { valor: "R$1.000.000,00", tipo: "Casa", nome: "Helena" },
+    { valor: "R$100.000,00", tipo: "Carro", nome: "Ricardo" },
+  ];
+
+  const [gastosFixos, setGastosFixos] = useState<GastoFixo[]>([
+    { nome: "Ricardo", categoria: "Telefone", valor: "R$400,00", parcelas: "3 / 12" },
+    { nome: "Lucas", categoria: "Faculdade", valor: "R$900,00", parcelas: "2 / 6" },
+  ]);
+
+  const [gastosVariaveis, setGastosVariaveis] = useState<GastoVariavel[]>([
+    { nome: "Zilma", categoria: "Almoço", valor: "R$400,00" },
+    { nome: "Helena", categoria: "shopping", valor: "R$900,00" },
+  ]);
+
+  return (
+    <div className="min-h-screen bg-[#e8f0ea] font-['DM_Sans',sans-serif]">
+      <Header />
+
+      {/* ── MOBILE ── */}
+      <main className="lg:hidden p-4 flex flex-col gap-4 max-w-md mx-auto">
+        <Card title="Salário Restante">
+          <DonutChart total={2500} spent={500} />
+        </Card>
+        <Card title="Salário Gasto">
+          <SalarioGastoContent />
+        </Card>
+        <Card title="Gastos Fixos">
+          <GastosFixosContent gastosFixos={gastosFixos} />
+          <AddButton label="Adicionar Gastos Fixos" onClick={() => setShowModalFixos(true)} />
+        </Card>
+        <Card title="Gastos Variáveis">
+          <GastosVariaveisContent gastosVariaveis={gastosVariaveis} />
+          <AddButton label="Adicionar Gastos Variáveis" onClick={() => setShowModalVariaveis(true)} />
+        </Card>
+        <Link to="/patrimonio">
+          <Card title="Patrimônio">
+            <PatrimonioContent patrimonio={patrimonio} />
+            <AddButton label="Adicionar Patrimônio" />
+          </Card>
+        </Link>
+        <div className="flex justify-end pb-2">
+          <button className="flex items-center gap-2 bg-green-700 hover:bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow transition-all duration-200 active:scale-95">
+            <Trash2 size={15} /> Excluir Conta
+          </button>
+        </div>
+      </main>
+
+      {/* ── DESKTOP ── */}
+      <main
+        className="hidden lg:grid p-5 gap-4 max-w-5xl mx-auto"
+        style={{ gridTemplateColumns: "1fr 1fr 1fr", gridTemplateRows: "auto auto" }}
+      >
+        <Link to="/patrimonio">
+          <Card title="Patrimônio" className="row-span-2">
+            <PatrimonioContent patrimonio={patrimonio} />
+            <AddButton label="Adicionar Patrimônio" />
+          </Card>
+        </Link>
+
+        <Card title="Gastos Fixos">
+          <GastosFixosContent gastosFixos={gastosFixos} />
+          <AddButton label="Adicionar Gastos Fixos" onClick={() => setShowModalFixos(true)} />
+        </Card>
+
+        <Card title="Salário Restante">
+          <DonutChart total={2500} spent={500} />
+        </Card>
+
+        <Card title="Gastos Variáveis">
+          <GastosVariaveisContent gastosVariaveis={gastosVariaveis} />
+          <AddButton label="Adicionar Gastos Variáveis" onClick={() => setShowModalVariaveis(true)} />
+        </Card>
+
+        <Card title="Salário Gasto">
+          <SalarioGastoContent />
+        </Card>
+      </main>
+
+      <div className="hidden lg:flex justify-end px-5 pb-5 max-w-5xl mx-auto">
+        <button className="flex items-center gap-2 bg-green-700 hover:bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow transition-all duration-200 active:scale-95">
+          <Trash2 size={15} /> Excluir Conta
+        </button>
+      </div>
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
+      `}</style>
+    </div>
+  );
+}
