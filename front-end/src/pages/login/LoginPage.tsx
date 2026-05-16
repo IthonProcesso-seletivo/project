@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 import famigestaoLogo from "./assets/famigestao-logo.png";
+
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-[#F2F6F2] flex flex-col items-center font-sans pb-12">
@@ -111,12 +113,13 @@ export default function LoginPage() {
           </div>
 
           {/* BOTÃO SUBMIT */}
-          <button
-            type="submit"
-            className="w-full rounded-full bg-[#2D815D] hover:bg-[#1e5c40] active:scale-95 text-white font-bold py-3 mt-2 transition-all duration-200 shadow-sm"
-          >
-            Entrar
-          </button>
+         <button
+          type="submit"
+          onClick={() => navigate("/home")}
+          className="w-full rounded-full bg-[#2D815D] hover:bg-[#1e5c40] active:scale-95 text-white font-bold py-3 mt-2 transition-all duration-200 shadow-sm"
+        >
+          Entrar
+        </button>
 
         </form>{/* FIX: form fechado corretamente */}
 

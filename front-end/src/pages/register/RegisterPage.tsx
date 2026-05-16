@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 import famigestaoLogo from "./assets/famigestao-logo.png";
 
 export default function RegisterPage() {
   // Estados para as duas senhas independentes
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-[#F2F6F2] flex flex-col items-center font-sans pb-12 relative">
@@ -133,7 +134,10 @@ export default function RegisterPage() {
 
           {/* BOTÃO CONCLUIR */}
           <div className="flex justify-center mt-4">
-            <button type="submit" className="rounded-full bg-[#2D815D] text-white px-12 py-3 font-bold text-md hover:bg-[#2D815D] hover:opacity-90 transition shadow-md">
+            <button 
+            type="submit" 
+            onClick={() => navigate("/home")}
+            className="rounded-full bg-[#2D815D] text-white px-12 py-3 font-bold text-md hover:bg-[#2D815D] hover:opacity-90 transition shadow-md">
               Concluir Registro
             </button>
           </div>
