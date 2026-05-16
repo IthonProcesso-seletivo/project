@@ -372,10 +372,42 @@ const Dropdown = ({ value, onChange }: DropdownProps) => {
   );
 };
 
+// ─── Nav Routes ───────────────────────────────────────────────────────────────
+
 const NAV_ROUTES: Record<NavItem, string> = {
   Home: "/",
   Despesas: "/despesas",
 };
+
+// ─── Nav Button ───────────────────────────────────────────────────────────────
+
+interface NavButtonProps {
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+  icon?: React.ReactNode;
+}
+
+const NavButton = ({ label, isActive, onClick, icon }: NavButtonProps) => (
+  <button
+    onClick={onClick}
+    className="flex items-center gap-1.5 px-5 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer border-none"
+    style={
+      isActive
+        ? { background: "white", color: COLORS.primaryDark }
+        : { background: "transparent", color: "rgba(255,255,255,0.75)" }
+    }
+    onMouseEnter={(e) => {
+      if (!isActive) e.currentTarget.style.color = "white";
+    }}
+    onMouseLeave={(e) => {
+      if (!isActive) e.currentTarget.style.color = "rgba(255,255,255,0.75)";
+    }}
+  >
+    {icon}
+    {label}
+  </button>
+);
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 
@@ -552,6 +584,7 @@ export default function CadastrarPatrimonio() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const formatCurrency = (raw: string): string => {
     const digits = raw.replace(/\D/g, "");
@@ -604,7 +637,8 @@ export default function CadastrarPatrimonio() {
       <Navbar />
 
       <div className="flex-1 flex items-center justify-center px-4 py-10 relative">
-        <BackButton />
+        
+        <BackButton onClick={() => navigate(-1)} />
 
         <div className="bg-white rounded-2xl px-10 py-10 w-full max-w-md shadow-xl">
           <CardHeader />
