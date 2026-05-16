@@ -2,6 +2,8 @@ import { useState } from "react";
 import { PlusCircle, Trash2, Menu, X, Lock, TrendingUp, User, Tag, DollarSign, Calendar, Check, RefreshCw } from "lucide-react";
 import famigestaoLogo from "../../assets/Logo.png";
 import { Link } from "react-router-dom";
+import { PlusCircle, Trash2} from "lucide-react";
+import Header from "../../components/home/Header";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -526,10 +528,6 @@ const SalarioGastoContent = () => (
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function FamigestaoHome() {
-  const [activeTab, setActiveTab] = useState("home");
-  const [showModalFixos, setShowModalFixos] = useState(false);
-  const [showModalVariaveis, setShowModalVariaveis] = useState(false);
-
   const patrimonio = [
     { valor: "R$1.000.000,00", tipo: "Casa", nome: "Helena" },
     { valor: "R$100.000,00", tipo: "Carro", nome: "Ricardo" },
@@ -547,50 +545,7 @@ export default function FamigestaoHome() {
 
   return (
     <div className="min-h-screen bg-[#e8f0ea] font-['DM_Sans',sans-serif]">
-
-      {/* Modals */}
-      {showModalFixos && (
-        <GastosFixosModal
-          onClose={() => setShowModalFixos(false)}
-          onAdd={(g) => setGastosFixos((prev) => [...prev, g])}
-        />
-      )}
-      {showModalVariaveis && (
-        <GastosVariaveisModal
-          onClose={() => setShowModalVariaveis(false)}
-          onAdd={(g) => setGastosVariaveis((prev) => [...prev, g])}
-        />
-      )}
-
-      {/* Navbar */}
-      <nav
-        className="min-h-[110px] px-8 flex items-center justify-between shadow-md"
-        style={{ background: COLORS.primary }}
-      >
-        <Link to="/home">
-          <img className="h-[100px] w-auto object-contain" src={famigestaoLogo} alt="Famigestão" />
-        </Link>
-
-        <div className="min-w-[300px] min-h-[60px] bg-[#89BFA1] p-[3px] flex items-center justify-between rounded-xl">
-          <Link
-            className="min-h-[50px] min-w-[150px] mr-1 text-white font-semibold rounded-xl flex items-center justify-center"
-            style={{ background: COLORS.primary }}
-            to="/home"
-          >
-            Home
-          </Link>
-          <Link
-            className="min-h-[50px] min-w-[150px] ml-1 text-white font-semibold rounded-xl flex items-center justify-center"
-            to="/despesas"
-          >
-            Despesas
-          </Link>
-        </div>
-
-        <button className="sm:hidden text-white" onClick={() => setActiveTab(activeTab === "menu" ? "home" : "menu")}>
-          <Menu size={22} />
-        </button>
-      </nav>
+      <Header />
 
       {/* ── MOBILE ── */}
       <main className="lg:hidden p-4 flex flex-col gap-4 max-w-md mx-auto">
