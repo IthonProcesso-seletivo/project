@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { PlusCircle, Trash2, Menu } from "lucide-react";
+import famigestaoLogo from "../../assets/Logo.png";
+import { Link } from "react-router-dom";
+
+const COLORS = {
+  primary: "#2D815D",
+  primaryDark: "#1e5c40",
+  primaryLight: "#EAF0EA",
+  primaryBorder: "#c2d9cb",
+  primaryMuted: "#a8c9b5",
+} as const;
 
 const DonutChart = ({ total, spent }) => {
   const radius = 54;
@@ -11,17 +21,32 @@ const DonutChart = ({ total, spent }) => {
   return (
     <div className="flex flex-col items-center gap-3">
       <svg width="140" height="140" viewBox="0 0 140 140">
-        <circle cx="70" cy="70" r={radius} fill="none" stroke="#d1fae5" strokeWidth="18" />
         <circle
-          cx="70" cy="70" r={radius} fill="none"
-          stroke="#16a34a" strokeWidth="18"
+          cx="70"
+          cy="70"
+          r={radius}
+          fill="none"
+          stroke="#d1fae5"
+          strokeWidth="18"
+        />
+        <circle
+          cx="70"
+          cy="70"
+          r={radius}
+          fill="none"
+          stroke="#16a34a"
+          strokeWidth="18"
           strokeDasharray={`${availDash} ${spentDash}`}
           strokeDashoffset={circ / 4}
           strokeLinecap="round"
         />
         <circle
-          cx="70" cy="70" r={radius} fill="none"
-          stroke="#ef4444" strokeWidth="18"
+          cx="70"
+          cy="70"
+          r={radius}
+          fill="none"
+          stroke="#ef4444"
+          strokeWidth="18"
           strokeDasharray={`${spentDash} ${availDash}`}
           strokeDashoffset={circ / 4 - availDash}
           strokeLinecap="round"
@@ -45,7 +70,9 @@ const HorizontalBar = ({ label, value, max, color }) => {
   const pct = Math.min((value / max) * 100, 100);
   return (
     <div className="flex items-center gap-2 mb-3">
-      <span className="text-xs text-gray-500 w-16 text-right shrink-0">{label}</span>
+      <span className="text-xs text-gray-500 w-16 text-right shrink-0">
+        {label}
+      </span>
       <div className="flex-1 bg-gray-100 rounded-sm h-5 overflow-hidden">
         <div
           className="h-full rounded-sm transition-all duration-700"
@@ -57,7 +84,9 @@ const HorizontalBar = ({ label, value, max, color }) => {
 };
 
 const Card = ({ title, children, className = "" }) => (
-  <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-3 ${className}`}>
+  <div
+    className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-3 ${className}`}
+  >
     <div className="flex justify-center">
       <span className="bg-green-700 text-white text-sm font-semibold px-6 py-2 rounded-xl tracking-wide shadow-sm w-full text-center">
         {title}
@@ -76,11 +105,18 @@ const AddButton = ({ label }) => (
 const GastosFixosContent = ({ gastosFixos }) => (
   <div className="flex-1 space-y-1">
     {gastosFixos.map((g, i) => (
-      <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0 gap-2">
-        <span className="w-16 font-medium text-gray-800 shrink-0">{g.nome}</span>
+      <div
+        key={i}
+        className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0 gap-2"
+      >
+        <span className="w-16 font-medium text-gray-800 shrink-0">
+          {g.nome}
+        </span>
         <span className="flex-1 text-center text-gray-600">{g.categoria}</span>
         <span className="text-gray-800 font-medium shrink-0">{g.valor}</span>
-        <span className="text-xs text-gray-500 w-10 text-right shrink-0">{g.parcelas}</span>
+        <span className="text-xs text-gray-500 w-10 text-right shrink-0">
+          {g.parcelas}
+        </span>
       </div>
     ))}
   </div>
@@ -89,10 +125,17 @@ const GastosFixosContent = ({ gastosFixos }) => (
 const GastosVariaveisContent = ({ gastosVariaveis }) => (
   <div className="flex-1 space-y-1">
     {gastosVariaveis.map((g, i) => (
-      <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0 gap-2">
-        <span className="w-16 font-medium text-gray-800 shrink-0">{g.nome}</span>
+      <div
+        key={i}
+        className="flex items-center justify-between text-sm py-2 border-b border-gray-50 last:border-0 gap-2"
+      >
+        <span className="w-16 font-medium text-gray-800 shrink-0">
+          {g.nome}
+        </span>
         <span className="flex-1 text-center text-gray-600">{g.categoria}</span>
-        <span className="text-gray-800 font-medium text-right shrink-0">{g.valor}</span>
+        <span className="text-gray-800 font-medium text-right shrink-0">
+          {g.valor}
+        </span>
       </div>
     ))}
   </div>
@@ -107,8 +150,13 @@ const PatrimonioContent = ({ patrimonio }) => (
     </div>
     <div className="flex-1">
       {patrimonio.map((item, i) => (
-        <div key={i} className="grid grid-cols-3 items-center text-sm text-gray-700 py-2.5 border-b border-gray-100 last:border-0">
-          <span className="text-gray-800 font-medium text-xs">{item.valor}</span>
+        <div
+          key={i}
+          className="grid grid-cols-3 items-center text-sm text-gray-700 py-2.5 border-b border-gray-100 last:border-0"
+        >
+          <span className="text-gray-800 font-medium text-xs">
+            {item.valor}
+          </span>
           <span className="text-center font-bold">{item.tipo}</span>
           <span className="text-right font-bold">{item.nome}</span>
         </div>
@@ -138,8 +186,18 @@ export default function FamigestaoHome() {
   ];
 
   const gastosFixos = [
-    { nome: "Ricardo", categoria: "Telefone", valor: "R$400,00", parcelas: "3 / 12" },
-    { nome: "Lucas", categoria: "Faculdade", valor: "R$900,00", parcelas: "2 / 6" },
+    {
+      nome: "Ricardo",
+      categoria: "Telefone",
+      valor: "R$400,00",
+      parcelas: "3 / 12",
+    },
+    {
+      nome: "Lucas",
+      categoria: "Faculdade",
+      valor: "R$900,00",
+      parcelas: "2 / 6",
+    },
   ];
 
   const gastosVariaveis = [
@@ -150,29 +208,39 @@ export default function FamigestaoHome() {
   return (
     <div className="min-h-screen bg-[#e8f0ea] font-['DM_Sans',sans-serif]">
       {/* Navbar */}
-      <nav className="bg-green-800 px-4 sm:px-6 py-3 flex items-center justify-between shadow-md">
+      <nav
+        className="min-h-[110px] px-8 flex items-center justify-between shadow-md"
+        style={{ background: COLORS.primary }}
+      >
         <div className="flex items-center gap-2">
-          <img
-            src="./assets/Logo.png"
-            alt="FamiGestão"
-            onError={(e) => {  }}
-          />
-          <span className="text-white font-bold text-base tracking-widest">FAMIGESTÃO</span>
+          <Link to="/home">
+            <img
+              className="h-[100px] w-auto object-contain"
+              src={famigestaoLogo}
+              alt="Famigestão"
+              // style={{ height: 44, width: "auto", objectFit: "contain" }}
+            />
+          </Link>
         </div>
 
         {/* Desktop: Home + Menu pills */}
-        <div className="hidden sm:flex border border-white/40 rounded-xl overflow-hidden">
-          {[{ key: "home", label: "Home" }, { key: "menu", label: "Menu" }].map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`px-6 py-1.5 text-sm font-semibold transition-all duration-200 ${
-                activeTab === tab.key ? "bg-white/20 text-white" : "text-white/80 hover:text-white"
-              }`}
+        <div className="min-w-[300px] min-h-[60px] bg-[#89BFA1] p-[3px] flex items-center justify-between rounded-xl">
+          <Link
+            className={"bg-[" + COLORS.primary + "] min-h-[50px] min-w-[150px] mr-1 text-white font-semibold rounded-xl flex items-center justify-center"}
+            to="/home"
+          >
+            Home
+          </Link>
+          <div>
+            <Link
+              className={
+                "min-h-[50px] min-w-[150px] ml-1 text-white font-semibold rounded-xl flex items-center justify-center"
+              }
+              to="/despesas"
             >
-              {tab.label}
-            </button>
-          ))}
+              Despesas
+            </Link>
+          </div>
         </div>
 
         {/* Mobile: hamburger */}
@@ -222,7 +290,10 @@ export default function FamigestaoHome() {
       */}
       <main
         className="hidden lg:grid p-5 gap-4 max-w-5xl mx-auto"
-        style={{ gridTemplateColumns: "1fr 1fr 1fr", gridTemplateRows: "auto auto" }}
+        style={{
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateRows: "auto auto",
+        }}
       >
         {/* Col 1 — Patrimônio (rows 1-2) */}
         <Card title="Patrimônio" className="row-span-2">
