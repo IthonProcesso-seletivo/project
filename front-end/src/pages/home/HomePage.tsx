@@ -725,7 +725,7 @@ export default function FamigestaoHome() {
         </Card>
         <Card title="Patrimônio">
           <PatrimonioContent patrimonio={patrimonio} />
-          <AddButton label="Adicionar Patrimônio" />
+          <Link to="/patrimonio"><AddButton label="Adicionar Patrimônio" /></Link>
         </Card>
         <div className="flex justify-end pb-2">
           <button
