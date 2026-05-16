@@ -228,6 +228,8 @@ const Dropdown = ({ value, onChange }: DropdownProps) => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+
+export default function PatrimonioPage() {
   return (
     <div className="relative" ref={ref}>
       <button
