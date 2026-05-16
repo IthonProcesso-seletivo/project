@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { PlusCircle, Trash2, Menu } from "lucide-react";
-import famigestaoLogo from "../../assets/Logo.png";
-import { Link } from "react-router-dom";
+import { PlusCircle, Trash2} from "lucide-react";
+import Header from "../../components/home/Header";
 
 const COLORS = {
   primary: "#2D815D",
@@ -178,8 +176,6 @@ const SalarioGastoContent = () => (
 );
 
 export default function FamigestaoHome() {
-  const [activeTab, setActiveTab] = useState("home");
-
   const patrimonio = [
     { valor: "R$1.000.000,00", tipo: "Casa", nome: "Helena" },
     { valor: "R$100.000,00", tipo: "Carro", nome: "Ricardo" },
@@ -207,47 +203,7 @@ export default function FamigestaoHome() {
 
   return (
     <div className="min-h-screen bg-[#e8f0ea] font-['DM_Sans',sans-serif]">
-      {/* Navbar */}
-      <nav
-        className="min-h-[110px] px-8 flex items-center justify-between shadow-md"
-        style={{ background: COLORS.primary }}
-      >
-        <div className="flex items-center gap-2">
-          <Link to="/home">
-            <img
-              className="h-[100px] w-auto object-contain"
-              src={famigestaoLogo}
-              alt="Famigestão"
-              // style={{ height: 44, width: "auto", objectFit: "contain" }}
-            />
-          </Link>
-        </div>
-
-        {/* Desktop: Home + Menu pills */}
-        <div className="min-w-[300px] min-h-[60px] bg-[#89BFA1] p-[3px] flex items-center justify-between rounded-xl">
-          <Link
-            className={"bg-[" + COLORS.primary + "] min-h-[50px] min-w-[150px] mr-1 text-white font-semibold rounded-xl flex items-center justify-center"}
-            to="/home"
-          >
-            Home
-          </Link>
-          <div>
-            <Link
-              className={
-                "min-h-[50px] min-w-[150px] ml-1 text-white font-semibold rounded-xl flex items-center justify-center"
-              }
-              to="/despesas"
-            >
-              Despesas
-            </Link>
-          </div>
-        </div>
-
-        {/* Mobile: hamburger */}
-        <button className="sm:hidden text-white" onClick={() => setActiveTab(activeTab === "menu" ? "home" : "menu")}>
-          <Menu size={22} />
-        </button>
-      </nav>
+      <Header />
 
       {/* ── MOBILE layout (< lg) ─────────────────────────────────────────── */}
       {/* Order: Salário Restante → Salário Gasto → Gastos Fixos → Gastos Variáveis → Patrimônio */}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Menu, SlidersHorizontal } from "lucide-react";
+import { ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar, Doughnut } from "react-chartjs-2";
+import Header from "../../components/home/Header";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
@@ -244,7 +245,6 @@ function ChartCard({ title, children }: { title: string; children: React.ReactNo
 // ─── DespesasPage ─────────────────────────────────────────────────────────────
 export default function DespesasPage() {
   const [mesIndex,   setMesIndex]   = useState(4);
-  const [menuOpen,   setMenuOpen]   = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState<FiltroTipo>("Todos");
 
@@ -261,63 +261,9 @@ export default function DespesasPage() {
   return (
     <div className="min-h-screen bg-[#EAF0EA]" style={P}>
 
-      {/* ── Navbar ──────────────────────────────────────────────────────── */}
-      <nav
-        className="bg-[#2D815D] px-4 sm:px-8 flex items-center justify-between shadow-md"
-        style={{ minHeight: 72 }}
-      >
-        <div className="flex items-center gap-3">
-          <div className="" style={{ borderRadius: 12 }}>
-            <img
-              src="/src/assets/Logo.png"
-              alt="Logo FamiGestão"
-              className="h-20 w-20 object-contain"
-              onError={() => {}}
-            />
-          </div>
+      <Header />
 
-        </div>
-
-        {/* Desktop */}
-        <div
-          className="hidden sm:flex items-center bg-[#89BFA1] p-1 gap-1"
-          style={{ borderRadius: 16 }}
-        >
-          <a
-            href="/"
-            className="px-8 py-2 text-green-900 hover:bg-white/10 transition-colors hover:text-white"
-            style={{ ...P, fontSize: 15, fontWeight: 500, borderRadius: 16 }}
-          >
-            Home
-          </a>
-          <span
-            className="px-8 py-2 bg-[#2D815D] text-white"
-            style={{ ...P, fontSize: 15, fontWeight: 600, borderRadius: 16 }}
-          >
-            Despesas
-          </span>
-        </div>
-
-        {/* Mobile */}
-        <button
-          className="sm:hidden text-white p-2"
-          onClick={() => setMenuOpen(o => !o)}
-          aria-label="Menu"
-        >
-          <Menu size={24} />
-        </button>
-      </nav>
-
-      {menuOpen && (
-        <div className="sm:hidden bg-[#2D815D] px-6 pb-4 flex flex-col">
-          <a href="/" className="text-white py-3 text-sm border-b border-white/20" style={P}>
-            Home
-          </a>
-          <span className="text-white py-3 text-sm font-semibold" style={P}>
-            Despesas
-          </span>
-        </div>
-      )}
+      
 
       {/* ── Conteúdo ────────────────────────────────────────────────────── */}
       <main className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto flex flex-col gap-6">
