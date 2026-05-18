@@ -1,9 +1,3 @@
-#!/bin/bash
-
-# ─────────────────────────────────────────
-#  Backend Setup — Node + TypeScript + Express + Prisma + PostgreSQL
-# ─────────────────────────────────────────
-
 set -e
 
 GREEN='\033[0;32m'
@@ -13,12 +7,12 @@ NC='\033[0m'
 log() { echo -e "${GREEN}[setup]${NC} $1"; }
 info() { echo -e "${BLUE}[info]${NC} $1"; }
 
-# ─── Estrutura de pastas ───
+
 log "Criando estrutura de pastas..."
 mkdir -p src/{config,controllers,middlewares,routes,services}
 mkdir -p prisma
 
-# ─── package.json ───
+
 log "Criando package.json..."
 cat > package.json << 'JSON'
 {
@@ -48,7 +42,7 @@ cat > package.json << 'JSON'
 }
 JSON
 
-# ─── tsconfig.json ───
+
 log "Criando tsconfig.json..."
 cat > tsconfig.json << 'JSON'
 {
@@ -69,14 +63,14 @@ cat > tsconfig.json << 'JSON'
 }
 JSON
 
-# ─── .env.example ───
+
 log "Criando .env.example..."
 cat > .env.example << 'ENV'
 PORT=3000
 DATABASE_URL="postgresql://admin:admin@localhost:5432/myapp"
 ENV
 
-# ─── .gitignore ───
+
 log "Criando .gitignore..."
 cat > .gitignore << 'GIT'
 node_modules/
@@ -84,7 +78,7 @@ dist/
 .env
 GIT
 
-# ─── docker-compose.yml ───
+
 log "Criando docker-compose.yml..."
 cat > docker-compose.yml << 'YAML'
 version: '3.8'
@@ -105,7 +99,7 @@ volumes:
   pgdata:
 YAML
 
-# ─── Prisma schema ───
+
 log "Criando prisma/schema.prisma..."
 cat > prisma/schema.prisma << 'PRISMA'
 generator client {
@@ -127,7 +121,7 @@ model User {
 }
 PRISMA
 
-# ─── Prisma seed ───
+
 log "Criando prisma/seed.ts..."
 cat > prisma/seed.ts << 'SEED'
 import { PrismaClient } from '@prisma/client';
@@ -159,7 +153,7 @@ main()
   });
 SEED
 
-# ─── src/config/prisma.ts ───
+
 log "Criando src/config/prisma.ts..."
 cat > src/config/prisma.ts << 'TS'
 import { PrismaClient } from '@prisma/client';
@@ -167,7 +161,7 @@ import { PrismaClient } from '@prisma/client';
 export const prisma = new PrismaClient();
 TS
 
-# ─── src/middlewares/errorHandler.ts ───
+
 log "Criando src/middlewares/errorHandler.ts..."
 cat > src/middlewares/errorHandler.ts << 'TS'
 import { Request, Response, NextFunction } from 'express';
@@ -183,7 +177,7 @@ export function errorHandler(
 }
 TS
 
-# ─── src/routes/index.ts ───
+
 log "Criando src/routes/index.ts..."
 cat > src/routes/index.ts << 'TS'
 import { Router } from 'express';
@@ -198,7 +192,7 @@ router.get('/health', (req, res) => {
 router.use('/users', userRoutes);
 TS
 
-# ─── src/routes/user.routes.ts ───
+
 log "Criando src/routes/user.routes.ts..."
 cat > src/routes/user.routes.ts << 'TS'
 import { Router } from 'express';
@@ -211,7 +205,7 @@ userRoutes.get('/:id', UserController.getById);
 userRoutes.post('/', UserController.create);
 TS
 
-# ─── src/controllers/user.controller.ts ───
+
 log "Criando src/controllers/user.controller.ts..."
 cat > src/controllers/user.controller.ts << 'TS'
 import { Request, Response, NextFunction } from 'express';
@@ -248,7 +242,7 @@ export class UserController {
 }
 TS
 
-# ─── src/services/user.service.ts ───
+
 log "Criando src/services/user.service.ts..."
 cat > src/services/user.service.ts << 'TS'
 import { prisma } from '../config/prisma';
@@ -268,7 +262,7 @@ export class UserService {
 }
 TS
 
-# ─── src/server.ts ───
+
 log "Criando src/server.ts..."
 cat > src/server.ts << 'TS'
 import express from 'express';
@@ -290,7 +284,7 @@ app.listen(PORT, () => {
 });
 TS
 
-# ─── README.md ───
+
 log "Criando README.md..."
 cat > README.md << 'MD'
 # Backend — Node.js + TypeScript + Express + Prisma + PostgreSQL
