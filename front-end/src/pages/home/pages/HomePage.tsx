@@ -86,7 +86,7 @@ export default function FamigestaoHome() {
   const BotaoSaldo = () => (
     <button
       onClick={() => setShowModalSaldo(true)}
-      className="flex items-center gap-2 text-white text-sm font-semibold px-5 py-2.5  bg-green-700 rounded-xl shadow transition-all duration-200 active:scale-95 hover:opacity-90"
+      className="flex items-center justify-center gap-2 text-white text-sm font-semibold px-5 py-2.5  bg-green-700 rounded-xl shadow transition-all duration-200 active:scale-95 hover:opacity-90 text-center"
     >
       <Wallet size={15} /> Inserir Saldo
     </button>
