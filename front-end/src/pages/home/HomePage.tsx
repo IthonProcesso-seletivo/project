@@ -1,25 +1,25 @@
 import { useState } from "react";
 import { Trash2 , Wallet} from "lucide-react";
 import { Link } from "react-router-dom";
-import Header from "../../../components/home/Header/NavBar";
+import Header from "../../components/Header/NavBar";
 
-import type {GastoFixo , GastoVariavel , PatrimonioItem}  from "../components/shared/types";
+import type {GastoFixo , GastoVariavel , PatrimonioItem}  from "../../components/home/shared/types";
 
-import { GastosFixosModal } from "../components/modals/GastosFixosModal";
-import { GastosVariaveisModal } from "../components/modals/GastosVariaveisModal";
-import { ExcluirContaModal } from "../components/modals/ExcluirContaModal";
-import { InserirSaldoModal } from "../components/modals/InserirSaldoModal";
-import type { SaldoFamiliar } from "../components/modals/InserirSaldoModal";
+import { GastosFixosModal } from "../../components/home/modals/GastosFixosModal";
+import { GastosVariaveisModal } from "../../components/home/modals/GastosVariaveisModal";
+import { ExcluirContaModal } from "../../components/home/modals/ExcluirContaModal";
+import { InserirSaldoModal } from "../../components/home/modals/InserirSaldoModal";
+import type { SaldoFamiliar } from "../../components/home/modals/InserirSaldoModal";
 
-import { Card, AddButton } from "../components/cards/Card";
-import { GastosFixosContent } from "../components/cards/GastosFixosContent";
-import { GastosVariaveisContent } from "../components/cards/GastosVariaveisContent";
-import { PatrimonioContent } from "../components/cards/PatrimonioContent";
-import { SalarioGastoContent } from "../components/cards/SalarioGastoContent";
+import { Card, AddButton } from "../../components/home/cards/Card";
+import { GastosFixosContent } from "../../components/home/cards/GastosFixosContent";
+import { GastosVariaveisContent } from "../../components/home/cards/GastosVariaveisContent";
+import { PatrimonioContent } from "../../components/home/cards/PatrimonioContent";
+import { SalarioGastoContent } from "../../components/home/cards/SalarioGastoContent";
 
-import { SaldoDonutChart } from "../components/charts/SaldoDonutChart";
+import { SaldoDonutChart } from "../../components/home/charts/SaldoDonutChart";
 
-import { COLORS } from "../components/shared/constants";
+import { COLORS } from "../../components/home/shared/constants";
 
 const parseBRL = (valor: string): number =>
   parseFloat(valor.replace(/[R$\s.]/g, "").replace(",", ".")) || 0;

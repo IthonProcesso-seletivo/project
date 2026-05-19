@@ -4,7 +4,7 @@ import { BackButton } from "../components/layout/BackButton";
 import { CardHeader } from "../components/patrimonio/CardHeader";
 import { PatrimonioForm } from "../components/patrimonio/PatrimonioForm";
 import { usePatrimonioForm } from "../hooks/usePatrimonioForm";
-import Header from "../../../components/home/Header/NavBar";
+import Header from "../../../components/Header/NavBar";
 
 export default function CadastrarPatrimonio() {
   const navigate = useNavigate();
