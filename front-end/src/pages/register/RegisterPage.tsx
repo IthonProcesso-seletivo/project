@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
-import famigestaoLogo from "./assets/famigestao-logo.png";
+import famigestaoLogo from "../../assets/Logo.png";
 
 export default function RegisterPage() {
   // Estados para as duas senhas independentes
@@ -19,7 +19,7 @@ export default function RegisterPage() {
           <img
             src={famigestaoLogo}
             alt="Famigestão"
-            className="w-full h-full object-cover"
+           
           />
         </div>
         

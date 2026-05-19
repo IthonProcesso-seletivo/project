@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
-import famigestaoLogo from "./assets/famigestao-logo.png";
+import famigestaoLogo from "../../assets/Logo.png";
 
 
 export default function LoginPage() {
@@ -18,7 +18,7 @@ export default function LoginPage() {
           <img
             src={famigestaoLogo}
             alt="Famigestão"
-            className="w-full h-full object-cover"
+            
           />
         </div>
       </header>
