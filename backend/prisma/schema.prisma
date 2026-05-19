@@ -7,11 +7,119 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Exemplo de model — fique à vontade para modificar!
-model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum TipoGasto {
+  Fixo
+  Variavel
+}
+
+enum TipoPeriodo {
+  Semanal
+  Quinzenal
+  Mensal
+  Anual
+}
+
+enum TipoPatrimonio {
+  Imovel
+  Veiculo
+  Investimento
+  Equipamento
+  Outros
+}
+
+model Familia {
+  id          Int           @id @default(autoincrement())
+  nome        String
+
+  usuarios    Usuario[]
+  membros     Membro[]
+  patrimonios Patrimonio[]
+
+  @@map("familia")
+}
+
+model Usuario {
+  id         Int      @id @default(autoincrement())
+  idFamilia  Int      @unique
+  email      String   @unique
+  senha      String
+
+  familia    Familia  @relation(fields: [idFamilia], references: [id])
+  membros    Membro[]
+
+  @@map("usuario")
+}
+
+model Membro {
+  id          Int         @id @default(autoincrement())
+  idFamilia   Int
+  idUsuario   Int
+  nome        String
+
+  familia      Familia     @relation(fields: [idFamilia], references: [id])
+  usuario      Usuario     @relation(fields: [idUsuario], references: [id])
+
+  despesas     Despesa[]
+  salarios     Salario[]
+  patrimonios  Patrimonio[]
+
+  @@map("membro")
+}
+
+model Categoria {
+  id         Int        @id @default(autoincrement())
+  nome       String
+
+  despesas   Despesa[]
+
+  @@map("categoria")
+}
+
+model Despesa {
+  id                Int            @id @default(autoincrement())
+  idMembro          Int
+  idCategoria       Int
+
+  nome              String
+  valor             Decimal        @db.Decimal(10, 2)
+  data              DateTime       @db.Date
+
+  tipo              TipoGasto
+  periodo           TipoPeriodo?
+
+  parcelasPagas     Int?
+  totalParcelas     Int?
+
+  membro            Membro         @relation(fields: [idMembro], references: [id])
+  categoria         Categoria      @relation(fields: [idCategoria], references: [id])
+
+  @@map("despesa")
+}
+
+model Salario {
+  id               Int        @id @default(autoincrement())
+  idMembro         Int
+
+  salarioBruto     Decimal    @db.Decimal(10, 2)
+  mesReferencia    DateTime   @db.Date
+
+  membro           Membro     @relation(fields: [idMembro], references: [id])
+
+  @@map("salario")
+}
+
+model Patrimonio {
+  id            Int               @id @default(autoincrement())
+  idFamilia     Int
+  idMembro      Int?
+
+  tipo          TipoPatrimonio
+
+  nome          String
+  valor         Decimal           @db.Decimal(15, 2)
+
+  familia       Familia           @relation(fields: [idFamilia], references: [id])
+  membro        Membro?           @relation(fields: [idMembro], references: [id])
+
+  @@map("patrimonio")
 }

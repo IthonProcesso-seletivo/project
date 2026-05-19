@@ -7,41 +7,48 @@ NC='\033[0m'
 log() { echo -e "${GREEN}[setup]${NC} $1"; }
 info() { echo -e "${BLUE}[info]${NC} $1"; }
 
-
 log "Criando estrutura de pastas..."
 mkdir -p src/{config,controllers,middlewares,routes,services}
 mkdir -p prisma
-
 
 log "Criando package.json..."
 cat > package.json << 'JSON'
 {
   "name": "backend",
   "version": "1.0.0",
+
   "scripts": {
+    "setup": "npm install && cp .env.example .env && docker compose up -d && prisma generate",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+
+    "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:generate": "prisma generate"
+    "db:seed": "tsx prisma/seed.ts"
   },
+
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+
   "dependencies": {
-    "@prisma/client": "^5.7.0",
+    "@prisma/client": "5.22.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2"
   },
+
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.10.0",
-    "prisma": "^5.7.0",
+    "prisma": "5.22.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.0"
   }
 }
 JSON
-
 
 log "Criando tsconfig.json..."
 cat > tsconfig.json << 'JSON'
@@ -51,54 +58,62 @@ cat > tsconfig.json << 'JSON'
     "module": "commonjs",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
-  "include": ["src"],
+
+  "include": ["src", "prisma"],
   "exclude": ["node_modules", "dist"]
 }
 JSON
 
-
 log "Criando .env.example..."
 cat > .env.example << 'ENV'
 PORT=3000
-DATABASE_URL="postgresql://admin:admin@localhost:5432/myapp"
+DATABASE_URL="postgresql://admin:admin@localhost:5433/myapp"
 ENV
-
 
 log "Criando .gitignore..."
 cat > .gitignore << 'GIT'
 node_modules/
 dist/
 .env
+.prisma/
 GIT
 
+log "Criando .dockerignore..."
+cat > .dockerignore << 'DOCKER'
+node_modules
+dist
+.git
+.env
+DOCKER
 
 log "Criando docker-compose.yml..."
 cat > docker-compose.yml << 'YAML'
-version: '3.8'
 services:
   db:
     image: postgres:16
     restart: always
+
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: myapp
+
     ports:
-      - '5432:5432'
+      - '5433:5432'
+
     volumes:
       - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:
 YAML
-
 
 log "Criando prisma/schema.prisma..."
 cat > prisma/schema.prisma << 'PRISMA'
@@ -111,16 +126,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Exemplo de model — fique à vontade para modificar!
 model User {
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 PRISMA
-
 
 log "Criando prisma/seed.ts..."
 cat > prisma/seed.ts << 'SEED'
@@ -132,15 +146,19 @@ async function main() {
   console.log('🌱 Seeding...');
 
   await prisma.user.upsert({
-    where: { email: 'mentor@example.com' },
+    where: {
+      email: 'mentor@example.com',
+    },
+
     update: {},
+
     create: {
       name: 'Mentor',
       email: 'mentor@example.com',
     },
   });
 
-  console.log('✅ Seed concluído!');
+  console.log('✅ Seed concluída!');
 }
 
 main()
@@ -153,14 +171,12 @@ main()
   });
 SEED
 
-
 log "Criando src/config/prisma.ts..."
 cat > src/config/prisma.ts << 'TS'
 import { PrismaClient } from '@prisma/client';
 
 export const prisma = new PrismaClient();
 TS
-
 
 log "Criando src/middlewares/errorHandler.ts..."
 cat > src/middlewares/errorHandler.ts << 'TS'
@@ -173,10 +189,12 @@ export function errorHandler(
   next: NextFunction
 ) {
   console.error(err.stack);
-  res.status(500).json({ error: err.message || 'Internal Server Error' });
+
+  res.status(500).json({
+    error: err.message || 'Internal Server Error',
+  });
 }
 TS
-
 
 log "Criando src/routes/index.ts..."
 cat > src/routes/index.ts << 'TS'
@@ -192,7 +210,6 @@ router.get('/health', (req, res) => {
 router.use('/users', userRoutes);
 TS
 
-
 log "Criando src/routes/user.routes.ts..."
 cat > src/routes/user.routes.ts << 'TS'
 import { Router } from 'express';
@@ -205,35 +222,56 @@ userRoutes.get('/:id', UserController.getById);
 userRoutes.post('/', UserController.create);
 TS
 
-
 log "Criando src/controllers/user.controller.ts..."
 cat > src/controllers/user.controller.ts << 'TS'
 import { Request, Response, NextFunction } from 'express';
 import { UserService } from '../services/user.service';
 
 export class UserController {
-  static async getAll(req: Request, res: Response, next: NextFunction) {
+  static async getAll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const users = await UserService.findAll();
+
       res.json(users);
     } catch (err) {
       next(err);
     }
   }
 
-  static async getById(req: Request, res: Response, next: NextFunction) {
+  static async getById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const user = await UserService.findById(Number(req.params.id));
-      if (!user) return res.status(404).json({ error: 'User not found' });
+      const user = await UserService.findById(
+        Number(req.params.id)
+      );
+
+      if (!user) {
+        return res.status(404).json({
+          error: 'User not found',
+        });
+      }
+
       res.json(user);
     } catch (err) {
       next(err);
     }
   }
 
-  static async create(req: Request, res: Response, next: NextFunction) {
+  static async create(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const user = await UserService.create(req.body);
+
       res.status(201).json(user);
     } catch (err) {
       next(err);
@@ -241,7 +279,6 @@ export class UserController {
   }
 }
 TS
-
 
 log "Criando src/services/user.service.ts..."
 cat > src/services/user.service.ts << 'TS'
@@ -253,45 +290,59 @@ export class UserService {
   }
 
   static findById(id: number) {
-    return prisma.user.findUnique({ where: { id } });
+    return prisma.user.findUnique({
+      where: { id },
+    });
   }
 
-  static create(data: { name: string; email: string }) {
-    return prisma.user.create({ data });
+  static create(data: {
+    name: string;
+    email: string;
+  }) {
+    return prisma.user.create({
+      data,
+    });
   }
 }
 TS
-
 
 log "Criando src/server.ts..."
 cat > src/server.ts << 'TS'
 import express from 'express';
 import dotenv from 'dotenv';
+
 import { router } from './routes';
 import { errorHandler } from './middlewares/errorHandler';
 
 dotenv.config();
 
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
 app.use('/api', router);
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server rodando na porta ${PORT}`);
+  console.log(
+    `🚀 Server rodando na porta ${PORT}`
+  );
 });
 TS
-
 
 log "Criando README.md..."
 cat > README.md << 'MD'
 # Backend — Node.js + TypeScript + Express + Prisma + PostgreSQL
 
 ## Pré-requisitos
-- [Node.js 20+](https://nodejs.org/)
-- [Docker](https://www.docker.com/)
+
+- Node.js 20+
+- Docker
+
+---
 
 ## Como rodar
 
@@ -302,40 +353,17 @@ npm install
 # 2. Configurar variáveis de ambiente
 cp .env.example .env
 
-# 3. Subir o banco de dados
+# 3. Subir o banco
 docker compose up -d
 
-# 4. Gerar o client do Prisma e rodar a migration
+# 4. Gerar Prisma Client
 npm run db:generate
+
+# 5. Rodar migration
 npm run db:migrate
 
-# 5. (Opcional) Popular o banco com dados iniciais
+# 6. Rodar seed
 npm run db:seed
 
-# 6. Iniciar o servidor em modo dev
+# 7. Iniciar servidor
 npm run dev
-```
-
-## Endpoints disponíveis
-
-| Método | Rota | Descrição |
-|--------|------|-----------|
-| GET | /api/health | Health check |
-| GET | /api/users | Lista todos os usuários |
-| GET | /api/users/:id | Busca usuário por ID |
-| POST | /api/users | Cria um novo usuário |
-
-## Prisma
-
-```bash
-npm run db:studio    # Abre interface visual do banco
-npm run db:migrate   # Roda migrations pendentes
-npm run db:seed      # Popula o banco com dados iniciais
-```
-MD
-
-echo ""
-info "Estrutura criada:"
-find . -not -path './node_modules/*' -not -path './.git/*' | sort | sed 's|[^/]*/|  |g'
-echo ""
-log "✅ Setup completo! Siga os passos do README.md para rodar o projeto."
